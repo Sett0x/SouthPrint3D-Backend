@@ -21,7 +21,8 @@ const userSchema = new Schema({
     floor: { type: String, required: false },
     apartment: { type: String, required: false}
 
-  }
+  },
+  role: { type: String, enum: ['admin', 'user'], default: 'user' }  // admin es el administrador del sitio web.
 
 }, { timestamps: true });
 
