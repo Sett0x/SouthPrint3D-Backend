@@ -1,62 +1,68 @@
-// Controladores de productos (product-controller.js)
 import Product from '../models/product.js';
-
-
-export async function getProducts(req, res) {
-  const products = await Product.find();
-  res.json(products);
-}
-
-export async function getProductById(req, res) {
-  const { id } = req.params;
-  const product = await Product.findById(id);
-  res.json(product);
-}
 
 export async function getProducts(req, res) {
   const { name, category, priceMin, priceMax } = req.query;
   let query = {};
 
   if (name) {
-    query.name = { $regex: name, $options: 'i' }; // Búsqueda por nombre, con coincidencia parcial y sin distinción entre mayúsculas y minúsculas
+    query.name = { $regex: name, $options: 'i' };
   }
 
   if (category) {
-    query.category = category; // Búsqueda por categoría
+    query.category = category;
   }
 
   if (priceMin || priceMax) {
-    query.price = {}; // Búsqueda por rango de precio
+    query.price = {};
     if (priceMin) query.price.$gte = parseFloat(priceMin);
     if (priceMax) query.price.$lte = parseFloat(priceMax);
   }
 
-  const products = await Product.find(query);
-  res.json(products);
+  try {
+    const products = await Product.find(query);
+    res.json(products);
+  } catch (error) {
+    res.status(500).json({ message: 'Error al obtener los productos' });
+  }
 }
-
 
 export async function createProduct(req, res) {
   const productData = req.body;
-  const product = await Product.create(productData);
-  res.status(201).json(product);
+  try {
+    const product = await Product.create(productData);
+    res.status(201).json(product);
+  } catch (error) {
+    res.status(400).json({ message: 'Error al crear el producto' });
+  }
 }
 
 export async function updateProduct(req, res) {
   const { id } = req.params;
   const productData = req.body;
-  const product = await Product.findByIdAndUpdate(id, productData, { new: true });
-  res.json(product);
+  try {
+    const product = await Product.findByIdAndUpdate(id, productData, { new: true });
+    res.json(product);
+  } catch (error) {
+    res.status(400).json({ message: 'Error al actualizar el producto' });
+  }
 }
 
 export async function deleteProduct(req, res) {
   const { id } = req.params;
-  await Product.findByIdAndDelete(id);
-  res.status(204).end();
+  try {
+    await Product.findByIdAndDelete(id);
+    res.status(204).end();
+  } catch (error) {
+    res.status(400).json({ message: 'Error al eliminar el producto' });
+  }
 }
 
 export async function getProductsByCategory(req, res) {
   const { category } = req.params;
-  const products = await Product.find({ category });
-  res.json(products);
+  try {
+    const products = await Product.find({ category });
+    res.json(products);
+  } catch (error) {
+    res.status(500).json({ message: 'Error al obtener los productos por categoría' });
+  }
 }
