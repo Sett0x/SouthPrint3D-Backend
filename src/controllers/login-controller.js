@@ -21,12 +21,3 @@ export function login(req, res, next){
 
     throw new HttpStatusError(401, 'Invalid credentials');
 }
-
-
-
-
-
-
-
-
-

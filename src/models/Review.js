@@ -9,4 +9,4 @@ const reviewSchema = new Schema({
   comment: { type: String }, // Comentario del usuario sobre el producto
 }, { timestamps: true });
 
-export default model('Review', reviewSchema);
+export default model('review', reviewSchema);

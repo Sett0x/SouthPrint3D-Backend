@@ -25,6 +25,7 @@ const productSchema = new Schema({
     depth: { type: Number, required: true }
   },
   averageRating: { type: Number, default: 0 },
+  images: [{ type: String }], // Campo para almacenar las URLs de las imágenes
 
   /*
   order: {
@@ -54,4 +55,4 @@ productSchema.path('detailsOrder').required(function () {
 }, 'Detalles de encargo son requeridos si el producto es bajo encargo');
 */
 
-export default model('Product', productSchema);
+export default model('product', productSchema);

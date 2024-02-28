@@ -22,3 +22,12 @@ export function checkToken(req, res, next){
 
     next();
 }
+
+export function isAdmin(req, res, next) {
+  // Verificar si el usuario tiene el rol de administrador
+  if (req.user && req.user.role === 'admin') {
+    next(); // Si es un administrador, continuar con la siguiente función de middleware
+  } else {
+    res.status(403).json({ message: 'Acceso no autorizado' }); // Si no es un administrador, devolver un error 403
+  }
+}

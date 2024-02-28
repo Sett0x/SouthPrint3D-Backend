@@ -14,4 +14,4 @@ const orderSchema = new Schema({
   shippingAddress: { type: Schema.Types.ObjectId, ref: 'User.address', required: true } // Dirección de envío
 }, { timestamps: true });
 
-export default model('Order', orderSchema);
+export default model('order', orderSchema);
