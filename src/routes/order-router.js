@@ -5,7 +5,11 @@ import {
   createOrder,
   getOrderById,
   updateOrderStatus,
-  searchOrders // Agrega la función para buscar pedidos
+  searchOrders, // Agrega la función para buscar pedidos
+  deleteOrder, // Agrega la función para eliminar un pedido
+  getUserOrdersByStatus, // Agrega la función para obtener pedidos por estado
+  getOrderHistoryByDate, // Agrega la función para obtener historial de pedidos por fecha
+  searchOrderHistoryByProduct // Agrega la función para buscar productos en historial de pedidos
 } from '../controllers/order-controller.js';
 import { checkToken, isAdmin } from '../middlewares/auth-middleware.js';
 

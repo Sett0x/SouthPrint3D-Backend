@@ -125,3 +125,70 @@ export async function searchOrders(req, res) {
     res.status(500).json({ message: 'Error al buscar pedidos' });
   }
 }
+
+// Eliminar un pedido
+export async function deleteOrder(req, res) {
+  const { id } = req.params;
+  try {
+    const order = await Order.findById(id);
+    // Verificar si el pedido existe
+    if (!order) {
+      return res.status(404).json({ message: 'Pedido no encontrado' });
+    }
+    // Verificar si el usuario tiene permiso para eliminar el pedido
+    if (req.user.id !== order.userId.toString()) {
+      return res.status(403).json({ message: 'Acceso no autorizado para eliminar el pedido' });
+    }
+    await order.remove();
+    res.json({ message: 'Pedido eliminado correctamente' });
+  } catch (error) {
+    console.error('Error al eliminar el pedido:', error);
+    res.status(500).json({ message: 'Error al eliminar el pedido' });
+  }
+}
+
+// Obtener pedidos por estado
+export async function getUserOrdersByStatus(req, res) {
+  const userId = req.user.id;
+  const { status } = req.params;
+  try {
+    const orders = await Order.find({ userId, status });
+    res.json(orders);
+  } catch (error) {
+    console.error('Error al obtener pedidos por estado:', error);
+    res.status(500).json({ message: 'Error al obtener pedidos por estado' });
+  }
+}
+
+// Obtener historial de pedidos por fecha
+export async function getOrderHistoryByDate(req, res) {
+  const userId = req.user.id;
+  // Obtener la fecha de inicio y fin del historial de pedidos
+  const { fromDate, toDate } = req.query;
+  try {
+    const orders = await Order.find({
+      userId,
+      createdAt: { $gte: new Date(fromDate), $lte: new Date(toDate) }
+    });
+    res.json(orders);
+  } catch (error) {
+    console.error('Error al obtener historial de pedidos por fecha:', error);
+    res.status(500).json({ message: 'Error al obtener historial de pedidos por fecha' });
+  }
+}
+
+// Buscar productos en historial de pedidos
+export async function searchOrderHistoryByProduct(req, res) {
+  const userId = req.user.id;
+  const { productName } = req.query;
+  try {
+    const orders = await Order.find({
+      userId,
+      'products.name': { $regex: productName, $options: 'i' }
+    });
+    res.json(orders);
+  } catch (error) {
+    console.error('Error al buscar productos en historial de pedidos:', error);
+    res.status(500).json({ message: 'Error al buscar productos en historial de pedidos' });
+  }
+}

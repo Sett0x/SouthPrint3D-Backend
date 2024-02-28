@@ -1,10 +1,12 @@
 import express from 'express';
-import { login, register } from '../controllers/auth-controller.js'; // Importar la función de registro
+import { checkToken, isAdmin } from '../middlewares/auth-middleware.js'; // Importar la función de registro
 import miscRouter from './misc-router.js';
 import productsRouter from './product-router.js';
 import usersRouter from './user-router.js'; // Importa las rutas de usuarios
 import ordersRouter from './order-router.js'; // Importa las rutas de pedidos
 import reviewRouter from './review-router.js'; // Importa las rutas de reseñas
+import { login } from '../controllers/login-controller.js';
+import { register } from '../controllers/register-controller.js';
 
 const router = express.Router();
 
