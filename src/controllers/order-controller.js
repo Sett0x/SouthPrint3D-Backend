@@ -1,0 +1,111 @@
+// order-controller.js
+import Order from '../models/order.js';
+import User from '../models/user.js'; // Importar el modelo de usuario
+
+// Obtener todos los pedidos del usuario autenticado
+export async function getUserOrders(req, res) {
+  const userId = req.user.id; // ID del usuario autenticado
+  const orders = await Order.find({ userId });
+  res.json(orders);
+}
+
+// Crear un nuevo pedido
+export async function createOrder(req, res) {
+  const userId = req.user.id; // ID del usuario autenticado
+
+  try {
+    // Obtener datos del usuario desde la base de datos
+    const user = await User.findById(userId);
+
+    // Verificar si el usuario existe
+    if (!user) {
+      return res.status(404).json({ message: 'Usuario no encontrado' });
+    }
+
+    // Obtener los productos y la dirección de envío del cuerpo de la solicitud
+    const { products, shippingAddress } = req.body;
+
+    // Verificar si se proporcionaron productos
+    if (!products || products.length === 0) {
+      return res.status(400).json({ message: 'Debe proporcionar al menos un producto' });
+    }
+
+    // Verificar si la dirección de envío está presente
+    if (!shippingAddress) {
+      return res.status(400).json({ message: 'La dirección de envío es requerida' });
+    }
+
+    // Crear un nuevo pedido con los datos del usuario y los productos
+    const order = await Order.create({ userId, products, shippingAddress });
+
+    // Devolver el pedido creado
+    res.status(201).json(order);
+  } catch (error) {
+    console.error('Error al crear el pedido:', error);
+    res.status(500).json({ message: 'Error al crear el pedido' });
+  }
+}
+
+// Obtener un pedido por su ID
+export async function getOrderById(req, res) {
+  const { id } = req.params;
+  try {
+    const order = await Order.findById(id);
+    // Verificar si el pedido existe
+    if (!order) {
+      return res.status(404).json({ message: 'Pedido no encontrado' });
+    }
+    // Verificar si el pedido pertenece al usuario autenticado
+    if (order.userId.toString() !== req.user.id) {
+      return res.status(403).json({ message: 'Acceso no autorizado' });
+    }
+    res.json(order);
+  } catch (error) {
+    console.error('Error al obtener el pedido por ID:', error);
+    res.status(500).json({ message: 'Error al obtener el pedido' });
+  }
+}
+
+// Actualizar el estado de un pedido
+export async function updateOrderStatus(req, res) {
+  const { id } = req.params;
+  const { status } = req.body;
+  const order = await Order.findById(id);
+  // Verificar si el pedido pertenece al usuario autenticado
+  if (order.userId.toString() !== req.user.id) {
+    return res.status(403).json({ message: 'Acceso no autorizado' });
+  }
+  order.status = status;
+  await order.save();
+  res.json(order);
+}
+
+// Función para buscar pedidos por diferentes parámetros
+export async function searchOrders(req, res) {
+  const { userId } = req.user; // ID del usuario autenticado
+
+  // Extraer los parámetros de búsqueda del cuerpo de la solicitud
+  const { fromDate, toDate, minTotalPrice, maxTotalPrice, productId } = req.query;
+
+  // Crear un objeto de búsqueda con los parámetros proporcionados
+  const searchQuery = { userId };
+  if (fromDate && toDate) {
+    searchQuery.date = { $gte: new Date(fromDate), $lte: new Date(toDate) };
+  }
+  if (minTotalPrice || maxTotalPrice) {
+    searchQuery.totalPrice = {};
+    if (minTotalPrice) searchQuery.totalPrice.$gte = parseFloat(minTotalPrice);
+    if (maxTotalPrice) searchQuery.totalPrice.$lte = parseFloat(maxTotalPrice);
+  }
+  if (productId) {
+    searchQuery['products.productId'] = productId;
+  }
+
+  try {
+    // Buscar los pedidos que coincidan con los criterios de búsqueda
+    const orders = await Order.find(searchQuery);
+    res.json(orders);
+  } catch (error) {
+    res.status(500).json({ message: 'Error al buscar pedidos' });
+  }
+}
