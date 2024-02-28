@@ -17,6 +17,9 @@ router.get('/orders', getUserOrders); // Obtener todos los pedidos del usuario
 router.post('/orders', createOrder); // Crear un nuevo pedido
 router.get('/orders/:id', getOrderById); // Obtener un pedido por su ID
 router.put('/orders/:id/status', isAdmin, updateOrderStatus); // Actualizar el estado de un pedido
-router.get('/orders/search', searchOrders); // Buscar pedidos por diferentes parámetros
+router.delete('/orders/:id', isAdmin, deleteOrder); // Eliminar un pedido cancelado
+router.get('/orders/status/:status', getUserOrdersByStatus); // Obtener pedidos por estado
+router.get('/orders/history', getOrderHistoryByDate); // Obtener historial de pedidos por fecha
+router.get('/orders/history/search', searchOrderHistoryByProduct); // Buscar productos en historial de pedidos
 
 export default router;

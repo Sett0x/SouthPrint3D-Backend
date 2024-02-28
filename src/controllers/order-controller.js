@@ -70,14 +70,30 @@ export async function getOrderById(req, res) {
 export async function updateOrderStatus(req, res) {
   const { id } = req.params;
   const { status } = req.body;
-  const order = await Order.findById(id);
-  // Verificar si el pedido pertenece al usuario autenticado
-  if (order.userId.toString() !== req.user.id) {
-    return res.status(403).json({ message: 'Acceso no autorizado' });
+  try {
+    const order = await Order.findById(id);
+    // Verificar si el pedido existe
+    if (!order) {
+      return res.status(404).json({ message: 'Pedido no encontrado' });
+    }
+    // Verificar si el pedido pertenece al usuario autenticado
+    if (order.userId.toString() !== req.user.id) {
+      return res.status(403).json({ message: 'Acceso no autorizado' });
+    }
+    // Actualizar el estado del pedido
+    order.status = status;
+    // Si el nuevo estado es "cancelado", eliminar el pedido
+    if (status === 'cancelado') {
+      await order.remove();
+      return res.json({ message: 'Pedido cancelado y eliminado' });
+    }
+    // Guardar el pedido actualizado
+    await order.save();
+    res.json(order);
+  } catch (error) {
+    console.error('Error al actualizar el estado del pedido:', error);
+    res.status(500).json({ message: 'Error al actualizar el estado del pedido' });
   }
-  order.status = status;
-  await order.save();
-  res.json(order);
 }
 
 // Función para buscar pedidos por diferentes parámetros
