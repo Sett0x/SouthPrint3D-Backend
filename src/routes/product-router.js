@@ -10,10 +10,10 @@ import { isAdmin } from '../middlewares/auth-middleware.js'; // Importar el midd
 
 const router = express.Router();
 
-router.get('/products', getProducts);
-router.post('/products', isAdmin, createProduct); // Aplicar el middleware isAdmin aquí
-router.put('/products/:id', isAdmin, updateProduct); // Aplicar el middleware isAdmin aquí
-router.delete('/products/:id', isAdmin, deleteProduct); // Aplicar el middleware isAdmin aquí
-router.get('/products/category/:category', getProductsByCategory);
+router.get('', getProducts);
+router.post('', isAdmin, createProduct); // Aplicar el middleware isAdmin aquí
+router.put('/:id', isAdmin, updateProduct); // Aplicar el middleware isAdmin aquí
+router.delete('/:id', isAdmin, deleteProduct); // Aplicar el middleware isAdmin aquí
+router.get('/category/:category', getProductsByCategory);
 
 export default router;

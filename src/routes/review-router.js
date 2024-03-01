@@ -14,20 +14,20 @@ const router = express.Router();
 // Rutas accesibles para usuarios administradores
 
 // Endpoint para crear una nueva reseña
-router.post('/review', isAdmin, createReview);
+router.post('', isAdmin, createReview);
 
 // Endpoint para actualizar una reseña existente
-router.put('/review/:id', isAdmin, updateReview);
+router.put('/:id', isAdmin, updateReview);
 
 // Endpoint para eliminar una reseña existente
-router.delete('/review/:id', isAdmin, deleteReview);
+router.delete('/:id', isAdmin, deleteReview);
 
 // Endpoint para obtener todas las reseñas
-router.get('/review', isAdmin, getAllReviews);
+router.get('', isAdmin, getAllReviews);
 
 // Rutas accesibles para todos los usuarios
 
 // Endpoint para obtener todas las reseñas de un producto
-router.get('/review/:productId', getProductReviews);
+router.get('/:productId', getProductReviews);
 
 export default router;
