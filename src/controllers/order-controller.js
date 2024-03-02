@@ -1,7 +1,7 @@
 // order-controller.js
 import Order from '../models/order.js';
 import User from '../models/user.js'; // Importar el modelo de usuario
-import * as OrderDBService from '../services/order-db-service.js';
+import * as OrderDBService from '../services/database/order-db-service.js';
 
 // Obtener todos los pedidos del usuario autenticado
 export async function getUserOrders(req, res) {

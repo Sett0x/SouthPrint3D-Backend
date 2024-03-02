@@ -1,4 +1,4 @@
-import Product from '../models/product.js';
+import Product from '../../models/order.js';
 
 export async function getProducts(queryParams) {
   const { name, category, priceMin, priceMax } = queryParams;

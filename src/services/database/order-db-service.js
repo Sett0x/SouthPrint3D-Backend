@@ -1,5 +1,5 @@
 // order-db-service.js
-import Order from '../models/order.js';
+import Order from '../../models/order.js';
 
 export async function getUserOrders(userId) {
   return await Order.find({ userId });
