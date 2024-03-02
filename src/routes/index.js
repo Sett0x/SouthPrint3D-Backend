@@ -1,5 +1,4 @@
 import express from 'express';
-import { checkToken, isAdmin } from '../middlewares/auth-middleware.js'; // Importar la función de registro
 import miscRouter from './misc-router.js';
 import productsRouter from './product-router.js';
 import usersRouter from './user-router.js'; // Importa las rutas de usuarios
