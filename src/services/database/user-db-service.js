@@ -41,7 +41,8 @@ export async function createUser(data) {
       email,
       address,
       phone,
-      nombre
+      nombre,
+      role: 'user'
     });
 
     return newUser;
