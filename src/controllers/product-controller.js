@@ -1,35 +1,19 @@
-import Product from '../models/product.js';
+import * as ProductDBService from '../services/database/product-db-service.js';
 
 export async function getProducts(req, res) {
-  const { name, category, priceMin, priceMax } = req.query;
-  let query = {};
-
-  if (name) {
-    query.name = { $regex: name, $options: 'i' };
-  }
-
-  if (category) {
-    query.category = category;
-  }
-
-  if (priceMin || priceMax) {
-    query.price = {};
-    if (priceMin) query.price.$gte = parseFloat(priceMin);
-    if (priceMax) query.price.$lte = parseFloat(priceMax);
-  }
-
+  const queryParams = req.query;
   try {
-    const products = await Product.find(query);
+    const products = await ProductDBService.getProducts(queryParams);
     res.json(products);
   } catch (error) {
-    res.status(500).json({ message: 'Error al obtener los productos' });
+    res.status(500).json({ message: error.message });
   }
 }
 
 export async function createProduct(req, res) {
   const productData = req.body;
   try {
-    const product = await Product.create(productData);
+    const product = await ProductDBService.createProduct(productData);
     res.status(201).json(product);
   } catch (error) {
     res.status(400).json({ message: 'Error al crear el producto' });
@@ -40,7 +24,7 @@ export async function updateProduct(req, res) {
   const { id } = req.params;
   const productData = req.body;
   try {
-    const product = await Product.findByIdAndUpdate(id, productData, { new: true });
+    const product = await ProductDBService.updateProduct(id, productData);
     res.json(product);
   } catch (error) {
     res.status(400).json({ message: 'Error al actualizar el producto' });
@@ -50,7 +34,7 @@ export async function updateProduct(req, res) {
 export async function deleteProduct(req, res) {
   const { id } = req.params;
   try {
-    await Product.findByIdAndDelete(id);
+    await ProductDBService.deleteProduct(id);
     res.status(204).end();
   } catch (error) {
     res.status(400).json({ message: 'Error al eliminar el producto' });
@@ -60,7 +44,7 @@ export async function deleteProduct(req, res) {
 export async function getProductsByCategory(req, res) {
   const { category } = req.params;
   try {
-    const products = await Product.find({ category });
+    const products = await ProductDBService.getProductsByCategory(category);
     res.json(products);
   } catch (error) {
     res.status(500).json({ message: 'Error al obtener los productos por categoría' });
