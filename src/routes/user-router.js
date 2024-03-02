@@ -3,7 +3,8 @@ import {
   getUsers,
   getUserById,
   updateUser,
-  deleteUser
+  deleteUser,
+  createUser
 } from '../controllers/user-controller.js';
 import { checkToken, isAdmin } from '../middlewares/auth-middleware.js';
 
@@ -16,5 +17,6 @@ router.get('', checkToken, isAdmin, getUsers);
 router.get('/:id', checkToken, getUserById);
 router.put('/:id', checkToken, updateUser); // Los usuarios pueden modificar su propio perfil
 router.delete('/:id', checkToken, deleteUser); // Los usuarios pueden eliminar su propia cuenta
+router.post('/register', createUser);
 
 export default router;
