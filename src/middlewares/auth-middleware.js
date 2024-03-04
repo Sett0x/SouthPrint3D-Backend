@@ -14,7 +14,8 @@ export function checkToken(req, res, next){
     const [_bearer, token] = authorization.split(' ');
 
     try{
-        jwt.verify(token, config.app.secretKey);
+        const objectToken =jwt.verify(token, config.app.secretKey);
+        req.user = objectToken;
     }catch(err){
         logger.error(err.message);
         throw HttpStatusError(401, 'Invalid token');

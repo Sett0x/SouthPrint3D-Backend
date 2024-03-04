@@ -32,7 +32,7 @@ export async function updateUser(req, res) {
   }
 }
 
-export async function createUser(req, res) {
+export async function createUser(req, res,next) {
   try {
     const { username, password, email, address, phone, nombre } = req.body;
 
@@ -48,7 +48,10 @@ export async function createUser(req, res) {
 
     res.status(201).json(newUser);
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    // TODO Conmtemplar 409
+    error.status = 400;
+    return next(error)
+    //res.status(400).json({ message: error.message });
   }
 }
 

@@ -1,4 +1,3 @@
-// order-db-service.js
 import Order from '../../models/order.js';
 
 export async function getUserOrders(userId) {

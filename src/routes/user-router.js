@@ -9,8 +9,8 @@ import {
 import { checkToken, isAdmin } from '../middlewares/auth-middleware.js';
 
 const router = express.Router();
+router.use(checkToken); // REFACT
 
-// Esta ruta solo será accesible para los administradores autenticados
 router.get('', checkToken, isAdmin, getUsers);
 
 // Rutas para acceder y modificar el propio perfil del usuario
