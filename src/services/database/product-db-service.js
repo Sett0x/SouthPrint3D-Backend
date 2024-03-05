@@ -28,18 +28,13 @@ export async function getProducts(queryParams) {
 
 export async function createProduct(productData) {
   try {
-    // Calcular el total price
-    const totalPrice = productData.price + (productData.price * productData.iva);
-    // Agregar el totalPrice al objeto de producto
-    productData.totalPrice = totalPrice;
-
+    // Crear el producto sin las imágenes
     const product = await Product.create(productData);
     return product;
   } catch (error) {
     throw new Error('Error al crear el producto');
   }
 }
-
 
 export async function updateProduct(id, productData) {
   try {
