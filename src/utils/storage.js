@@ -8,8 +8,8 @@ const storage = multer.diskStorage({
   },
   // Especificar el nombre del archivo
   filename: (req, file, cb) => {
-    // Obtener el ID del producto desde la solicitud
-    const productId = req.body.productId; // Asegúrate de que este sea el nombre correcto del campo que contiene el ID del producto en tu solicitud
+    // Obtener el ID del producto desde la URL de la solicitud
+    const productId = req.params.id; // Utiliza req.params.id en lugar de req.body.productId
 
     // Generar el nombre del archivo utilizando el ID del producto
     const fileName = `product_${productId}_${Date.now()}-${file.originalname}`;

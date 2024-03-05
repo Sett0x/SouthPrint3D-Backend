@@ -1,4 +1,5 @@
 import Product from '../../models/product.js';
+import mongoose from 'mongoose';
 
 export async function getProducts(queryParams) {
   const { name, category, priceMin, priceMax } = queryParams;
@@ -28,13 +29,19 @@ export async function getProducts(queryParams) {
 
 export async function createProduct(productData) {
   try {
-    // Crear el producto sin las imágenes
+    // Generar un nuevo ID para el producto
+    const productId = new mongoose.Types.ObjectId();
+    // Asignar el ID al producto
+    productData._id = productId;
+    // Crear el producto en la base de datos
     const product = await Product.create(productData);
     return product;
   } catch (error) {
-    throw new Error('Error al crear el producto');
+    console.error('Error al crear el producto:', error);
+    throw new Error('Error al crear el producto: ' + error.message);
   }
 }
+
 
 export async function updateProduct(id, productData) {
   try {
