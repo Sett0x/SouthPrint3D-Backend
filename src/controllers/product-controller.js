@@ -16,7 +16,7 @@ export async function createProduct(req, res) {
     const product = await ProductDBService.createProduct(productData);
     res.status(201).json(product);
   } catch (error) {
-    res.status(400).json({ message: 'Error al crear el producto' });
+    res.status(400).json({ message: 'Error al crear el producto1' });
   }
 }
 
