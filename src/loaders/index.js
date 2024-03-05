@@ -1,5 +1,7 @@
 import expressLoader from './express-loader.js';
+import mongodbLoader from './mongodb-loader.js';
 
-export function init(server, config){
-    expressLoader(server);
+export async function init(server, config){
+    await expressLoader(server);
+    await mongodbLoader(config);
 }
