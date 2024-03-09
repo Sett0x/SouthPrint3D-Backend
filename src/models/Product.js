@@ -2,11 +2,6 @@ import mongoose from 'mongoose';
 
 const { Schema, model } = mongoose;
 
-const imageSchema = new Schema({
-  url: { type: String, required: false },
-  caption: { type: String }
-});
-
 const productSchema = new Schema({
   name: { type: String, required: true },
   description: { type: String, required: true },
@@ -22,7 +17,7 @@ const productSchema = new Schema({
     depth: { type: Number, required: true }
   },
   averageRating: { type: Number, default: 0 },
-  images: [{ type: String }],
+  images: [{ type: String }], // Campo images como una matriz de cadenas
 }, { timestamps: true });
 
 // Hook para calcular el totalPrice antes de guardar el producto

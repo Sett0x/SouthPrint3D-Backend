@@ -14,14 +14,6 @@ export async function createProduct(req, res) {
   const productData = req.body;
   try {
     const product = await ProductDBService.createProduct(productData);
-
-    // Obtener las direcciones de las imágenes desde la solicitud
-    const imageUrls = req.files.map(file => file.path);
-
-    // Agregar las direcciones de las imágenes al objeto del producto
-    product.images = imageUrls;
-
-    // Guardar el producto actualizado en la base de datos
     await product.save();
 
     res.status(201).json(product);
