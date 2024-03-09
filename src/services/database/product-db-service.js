@@ -1,9 +1,12 @@
 import Product from '../../models/product.js';
-import mongoose from 'mongoose';
 
 export async function getProducts(queryParams) {
-  const { name, category, priceMin, priceMax } = queryParams;
+  const { id, name, category, priceMin, priceMax, minStock } = queryParams;
   let query = {};
+
+  if (id) {
+    query._id = id;
+  }
 
   if (name) {
     query.name = { $regex: name, $options: 'i' };
@@ -19,21 +22,22 @@ export async function getProducts(queryParams) {
     if (priceMax) query.price.$lte = parseFloat(priceMax);
   }
 
+  if (minStock) {
+    query.stock = { $gte: parseInt(minStock) };
+  }
+
   try {
     const products = await Product.find(query);
     return products;
   } catch (error) {
-    throw new Error('Error al obtener los productos');
+    throw new Error('Error al obtener los productos: ' + error.message);
   }
 }
 
+
+
 export async function createProduct(productData) {
   try {
-    // Generar un nuevo ID para el producto
-    const productId = new mongoose.Types.ObjectId();
-    // Asignar el ID al producto
-    productData._id = productId;
-    // Crear el producto en la base de datos
     const product = await Product.create(productData);
     return product;
   } catch (error) {
@@ -42,13 +46,12 @@ export async function createProduct(productData) {
   }
 }
 
-
 export async function updateProduct(id, productData) {
   try {
     const product = await Product.findByIdAndUpdate(id, productData, { new: true });
     return product;
   } catch (error) {
-    throw new Error('Error al actualizar el producto');
+    throw new Error('Error al actualizar el producto: ' + error.message);
   }
 }
 
@@ -56,15 +59,27 @@ export async function deleteProduct(id) {
   try {
     await Product.findByIdAndDelete(id);
   } catch (error) {
-    throw new Error('Error al eliminar el producto');
+    throw new Error('Error al eliminar el producto: ' + error.message);
   }
 }
 
 export async function getProductsByCategory(category) {
   try {
-    const products = await Product.find({ category });
+    const products = await Product.find({ category: { $regex: new RegExp(category, 'i') } });
     return products;
   } catch (error) {
-    throw new Error('Error al obtener los productos por categoría');
+    throw new Error('Error al obtener los productos por categoría: ' + error.message);
+  }
+}
+
+export async function getProductById(id) {
+  try {
+    const product = await Product.findById(id);
+    if (!product) {
+      throw new ValidationError('Producto no encontrado');
+    }
+    return product;
+  } catch (error) {
+    throw new Error('Error al obtener el producto por ID: ' + error.message);
   }
 }

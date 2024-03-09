@@ -1,12 +1,25 @@
 import * as ProductDBService from '../services/database/product-db-service.js';
 
-export async function getProducts(req, res) {
+export async function getProducts(req, res, next) {
   const queryParams = req.query;
   try {
     const products = await ProductDBService.getProducts(queryParams);
     res.json(products);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    next(error); // Pasar el error al siguiente middleware
+  }
+}
+
+export async function getProductById(req, res, next) {
+  const { id } = req.params;
+  try {
+    const product = await ProductDBService.getProductById(id);
+    if (!product) {
+      throw new ValidationError('Producto no encontrado');
+    }
+    res.json(product);
+  } catch (error) {
+    next(error); // Pasar el error al siguiente middleware
   }
 }
 
@@ -14,17 +27,12 @@ export async function createProduct(req, res) {
   const productData = req.body;
   try {
     const product = await ProductDBService.createProduct(productData);
-    await product.save();
-
     res.status(201).json(product);
   } catch (error) {
     console.error('Error al crear el producto:', error);
     res.status(400).json({ message: 'Error al crear el producto: ' + error.message });
   }
 }
-
-
-
 
 export async function updateProduct(req, res) {
   const { id } = req.params;
@@ -33,7 +41,7 @@ export async function updateProduct(req, res) {
     const product = await ProductDBService.updateProduct(id, productData);
     res.json(product);
   } catch (error) {
-    res.status(400).json({ message: 'Error al actualizar el producto' });
+    res.status(400).json({ message: 'Error al actualizar el producto: ' + error.message });
   }
 }
 
@@ -43,16 +51,29 @@ export async function deleteProduct(req, res) {
     await ProductDBService.deleteProduct(id);
     res.status(204).end();
   } catch (error) {
-    res.status(400).json({ message: 'Error al eliminar el producto' });
+    res.status(400).json({ message: 'Error al eliminar el producto: ' + error.message });
   }
 }
 
 export async function getProductsByCategory(req, res) {
   const { category } = req.params;
+
+  // Validar si la categoría es una cadena no vacía
+  if (!category || typeof category !== 'string') {
+    return res.status(400).json({ message: 'La categoría proporcionada no es válida.' });
+  }
+
   try {
     const products = await ProductDBService.getProductsByCategory(category);
+
+    // Verificar si se encontraron productos
+    if (products.length === 0) {
+      return res.status(404).json({ message: 'No se encontraron productos para la categoría especificada.' });
+    }
+
     res.json(products);
   } catch (error) {
-    res.status(500).json({ message: 'Error al obtener los productos por categoría' });
+    // Devolver un error más específico en caso de fallo
+    res.status(500).json({ message: 'Error al obtener los productos por categoría.', error: error.message });
   }
 }

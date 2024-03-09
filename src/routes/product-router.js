@@ -4,17 +4,18 @@ import {
   createProduct,
   updateProduct,
   deleteProduct,
-  getProductsByCategory
+  getProductsByCategory,
+  getProductById
 } from '../controllers/product-controller.js';
 import { isAdmin } from '../middlewares/auth-middleware.js';
-import upload from '../utils/storage.js';
 
 const router = express.Router();
 
 router.get('', getProducts);
-router.post('', isAdmin, upload.array('images', 5), createProduct);
+router.post('', isAdmin, createProduct);
 router.put('/:id', isAdmin, updateProduct);
 router.delete('/:id', isAdmin, deleteProduct);
 router.get('/category/:category', getProductsByCategory);
+router.get('/:id', getProductById);
 
 export default router;
