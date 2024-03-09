@@ -7,7 +7,7 @@ import { errorMiddleware } from '../middlewares/error-middleware.js';
 import { morganMiddleware } from '../config/morgan.js';
 import { swaggerDoc } from '../openapi/index.js';
 
-export default function(server){   
+export default function(server){
     /* Config */
     server.use(cors());
     server.use(express.json());
