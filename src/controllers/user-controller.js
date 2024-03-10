@@ -1,5 +1,22 @@
 // user-controller.js
 import * as UserService from '../services/database/user-db-service.js';
+import { validationResult, body } from 'express-validator';
+
+// Definir reglas de validación para los campos del usuario
+const validationRules = [
+  body('username').notEmpty().withMessage('El nombre de usuario es requerido'),
+  body('password').notEmpty().withMessage('La contraseña es requerida').isLength({ min: 6 }).withMessage('La contraseña debe tener al menos 6 caracteres'),
+  body('email').isEmail().withMessage('El formato del correo electrónico no es válido'),
+  body('phone').isMobilePhone().withMessage('El formato del número de teléfono no es válido'),
+  body('nombre.name').notEmpty().withMessage('El nombre es requerido'),
+  body('nombre.lastname').notEmpty().withMessage('El apellido es requerido'),
+  body('address.state').notEmpty().withMessage('El estado es requerido'),
+  body('address.province').notEmpty().withMessage('La provincia es requerida'),
+  body('address.city').notEmpty().withMessage('La ciudad es requerida'),
+  body('address.zipcode').notEmpty().withMessage('El código postal es requerido'),
+  body('address.street').notEmpty().withMessage('La calle es requerida'),
+  body('address.number').notEmpty().withMessage('El número es requerido').isInt().withMessage('El número debe ser un valor entero'),
+];
 
 export async function getUsers(req, res) {
   try {
@@ -32,11 +49,19 @@ export async function updateUser(req, res) {
   }
 }
 
-export async function createUser(req, res,next) {
-  try {
-    const { username, password, email, address, phone, nombre } = req.body;
+export async function createUser(req, res, next) {
+  // Ejecutar las reglas de validación
+  await Promise.all(validationRules.map(validation => validation.run(req)));
 
-    // Llamar al servicio para registrar al usuario
+  // Verificar si hay errores de validación
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
+  const { username, password, email, address, phone, nombre } = req.body;
+  try {
+    // Crear un nuevo usuario con los datos proporcionados
     const newUser = await UserService.createUser({
       username,
       password,
@@ -48,10 +73,8 @@ export async function createUser(req, res,next) {
 
     res.status(201).json(newUser);
   } catch (error) {
-    // TODO Conmtemplar 409
-    error.status = 400;
-    return next(error)
-    //res.status(400).json({ message: error.message });
+    // Manejo de errores
+    next(error);
   }
 }
 

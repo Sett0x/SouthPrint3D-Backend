@@ -47,7 +47,12 @@ export async function createUser(data) {
 
     return newUser;
   } catch (error) {
-    throw new Error('Error al registrar usuario: ' + error.message);
+    // Captura errores específicos y lanza errores personalizados
+    if (error.code === 11000) {
+      throw new Error('El correo electrónico o nombre de usuario ya está en uso');
+    } else {
+      throw new Error('Error al registrar usuario');
+    }
   }
 }
 

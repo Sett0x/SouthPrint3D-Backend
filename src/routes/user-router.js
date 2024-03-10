@@ -9,7 +9,7 @@ import {
 import { checkToken, isAdmin } from '../middlewares/auth-middleware.js';
 
 const router = express.Router();
-router.use(checkToken); // REFACT
+// router.use(checkToken); // REFACT
 
 router.get('', checkToken, isAdmin, getUsers);
 
