@@ -1,6 +1,16 @@
 import * as ProductDBService from '../services/database/product-db-service.js';
 import { validationResult, body } from 'express-validator';
 
+// Definir reglas de validación para los campos del producto
+const validationRules = [
+  body('name').notEmpty().withMessage('El nombre del producto es requerido'),
+  body('description').notEmpty().withMessage('La descripción del producto es requerida'),
+  body('price').isFloat({ min: 0 }).withMessage('El precio debe ser un número positivo'),
+  body('stock').isInt({ min: 0 }).withMessage('El stock debe ser un número entero positivo'),
+  body('category').notEmpty().withMessage('La categoría del producto es requerida'),
+  // Agregar más reglas de validación según sea necesario
+];
+
 export async function getProducts(req, res, next) {
   const queryParams = req.query;
   try {
@@ -25,16 +35,6 @@ export async function getProductById(req, res, next) {
 }
 
 export async function createProduct(req, res) {
-  // Definir reglas de validación para los campos del producto
-  const validationRules = [
-    body('name').notEmpty().withMessage('El nombre del producto es requerido'),
-    body('description').notEmpty().withMessage('La descripción del producto es requerida'),
-    body('price').isFloat({ min: 0 }).withMessage('El precio debe ser un número positivo'),
-    body('stock').isInt({ min: 0 }).withMessage('El stock debe ser un número entero positivo'),
-    body('category').notEmpty().withMessage('La categoría del producto es requerida'),
-    // Agregar más reglas de validación según sea necesario
-  ];
-
   // Ejecutar las reglas de validación
   await Promise.all(validationRules.map(validation => validation.run(req)));
 
