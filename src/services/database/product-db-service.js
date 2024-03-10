@@ -34,8 +34,6 @@ export async function getProducts(queryParams) {
   }
 }
 
-
-
 export async function createProduct(productData) {
   try {
     const product = await Product.create(productData);
