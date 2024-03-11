@@ -4,13 +4,12 @@ import * as ReviewController from '../controllers/review-controller.js';
 
 const router = express.Router();
 
-
 router.use(checkToken);
 
-router.get('',isAdmin ,ReviewController.getAllReviews);
+router.get('', isAdmin, ReviewController.getAllReviews);
 
 router.get('/:productId', ReviewController.getProductReviews);
-router.post('', ReviewController.createReview);
+router.post('/:productId', ReviewController.createReview);
 router.put('/:id', ReviewController.updateReview);
 router.delete('/:id', ReviewController.deleteReview);
 

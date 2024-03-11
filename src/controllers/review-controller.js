@@ -19,10 +19,11 @@ export async function getProductReviews(req, res) {
   }
 }
 
-// Crear una nueva reseña
+// Crear una nueva reseña vinculada a un producto
 export async function createReview(req, res) {
   const { user, product, rating, comment } = req.body;
   try {
+    // Aquí podrías realizar validaciones adicionales, como comprobar si el producto existe, etc.
     const review = await ReviewService.createReview({ user, product, rating, comment });
     res.status(201).json(review);
   } catch (error) {
@@ -68,4 +69,3 @@ export async function deleteReview(req, res) {
     res.status(500).json({ message: error.message });
   }
 }
-
