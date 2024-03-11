@@ -19,7 +19,7 @@ router.use(checkToken);
 router.get('', getUserOrders);
 router.post('', createOrder);
 router.get('/:id', getOrderById);
-router.put('/:id/status', isAdmin, updateOrderStatus); // susituir put por patch en todas las rutas
+router.patch('/:id/status', isAdmin, updateOrderStatus); // Se cambia 'put' por 'patch'
 router.delete('/:id', isAdmin, deleteOrder);
 router.get('/status/:status', getUserOrdersByStatus);
 router.get('/history', getOrderHistoryByDate);

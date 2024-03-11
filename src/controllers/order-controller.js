@@ -14,8 +14,6 @@ export async function getUserOrders(req, res) {
   }
 }
 
-
-
 // Crear un nuevo pedido
 export async function createOrder(req, res) {
   try {
@@ -96,10 +94,20 @@ export async function getOrderHistoryByDate(req, res) {
 // Buscar productos en historial de pedidos
 export async function searchOrderHistoryByProduct(req, res) {
   try {
-    const orders = await OrderDBService.searchOrderHistoryByProduct(req.user.id, req.query.productName);
+    let productName = req.query.productName;
+
+    // Verificar si productName no es una cadena de texto
+    if (typeof productName !== 'string') {
+      // Intentar convertir productName a cadena de texto
+      productName = String(productName);
+    }
+
+    // Realizar la consulta a la base de datos utilizando productName
+    const orders = await OrderDBService.searchOrderHistoryByProduct(req.user.id, productName);
     res.json(orders);
   } catch (error) {
     console.error('Error al buscar productos en historial de pedidos:', error);
     res.status(500).json({ message: 'Error al buscar productos en historial de pedidos' });
   }
 }
+
