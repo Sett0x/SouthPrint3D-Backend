@@ -6,6 +6,6 @@ export function errorMiddleware(err, req, res, next) {
     const msg = status === 500 ? 'Server Error' : message;
     const errorResponse = {
         status, message: msg
-    }
-    res.status(status).send(errorResponse);
+    };
+    res.status(status).json(errorResponse);
 }

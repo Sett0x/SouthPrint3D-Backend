@@ -1,10 +1,13 @@
+// services/database/review-db-service.js
 import Review from '../../models/review.js';
+import logger from '../../utils/logger.js';
 
 export async function getAllReviews() {
   try {
     const reviews = await Review.find().populate('user', 'username');
     return reviews;
   } catch (error) {
+    logger.error(`Error al obtener todas las reseñas: ${error.message}`);
     throw new Error('Error al obtener todas las reseñas');
   }
 }
@@ -14,6 +17,7 @@ export async function getProductReviews(productId) {
     const reviews = await Review.find({ product: productId }).populate('user', 'username');
     return reviews;
   } catch (error) {
+    logger.error(`Error al obtener las reseñas del producto: ${error.message}`);
     throw new Error('Error al obtener las reseñas del producto');
   }
 }
@@ -23,33 +27,32 @@ export async function createReview({ user, product, rating, comment }) {
     const review = await Review.create({ user, product, rating, comment });
     return review;
   } catch (error) {
+    logger.error(`Error al crear la reseña: ${error.message}`);
     throw new Error('Error al crear la reseña');
   }
 }
 
 export async function updateReview(id, { rating, comment }) {
   try {
-    const review = await Review.findById(id);
+    const review = await Review.findByIdAndUpdate(id, { rating, comment }, { new: true });
     if (!review) {
       throw new Error('Reseña no encontrada');
     }
-    review.rating = rating;
-    review.comment = comment;
-    await review.save();
     return review;
   } catch (error) {
+    logger.error(`Error al actualizar la reseña: ${error.message}`);
     throw new Error('Error al actualizar la reseña');
   }
 }
 
 export async function deleteReview(id) {
   try {
-    const review = await Review.findById(id);
+    const review = await Review.findByIdAndDelete(id);
     if (!review) {
       throw new Error('Reseña no encontrada');
     }
-    await review.remove();
   } catch (error) {
+    logger.error(`Error al eliminar la reseña: ${error.message}`);
     throw new Error('Error al eliminar la reseña');
   }
 }

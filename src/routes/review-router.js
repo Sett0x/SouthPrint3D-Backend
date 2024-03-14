@@ -1,16 +1,22 @@
+// routes/review-router.js
 import express from 'express';
 import { checkToken, isAdmin } from '../middlewares/auth-middleware.js';
-import * as ReviewController from '../controllers/review-controller.js';
+import {
+  getAllReviews,
+  getProductReviews,
+  createReview,
+  updateReview,
+  deleteReview
+} from '../services/database/review-db-service.js';
 
 const router = express.Router();
 
 router.use(checkToken);
 
-router.get('', isAdmin, ReviewController.getAllReviews);
-
-router.get('/:productId', ReviewController.getProductReviews);
-router.post('/:productId', ReviewController.createReview);
-router.put('/:id', ReviewController.updateReview);
-router.delete('/:id', ReviewController.deleteReview);
+router.get('', isAdmin, getAllReviews);
+router.get('/:productId', getProductReviews);
+router.post('/:productId', createReview);
+router.put('/:id', updateReview);
+router.delete('/:id', deleteReview);
 
 export default router;
