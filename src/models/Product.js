@@ -8,6 +8,7 @@ const productSchema = new Schema({
   price: { type: Number, required: true, min: 0 },
   iva: { type: Number, default: 0.21, min: 0 },
   totalPrice: { type: Number, required: false },
+  ivaPrice: { type: Number, required: false },
   discount: { type: Number, default: 0, min: 0, max: 100 },
   stock: { type: Number, required: true, min: 0 },
   category: { type: String, required: true },
@@ -23,6 +24,8 @@ const productSchema = new Schema({
 // Hook para calcular el totalPrice antes de guardar el producto
 productSchema.pre('save', function (next) {
   this.totalPrice = this.price + (this.price * this.iva);
+
+  this.ivaPrice = this.price * this.iva;
   next();
 });
 
