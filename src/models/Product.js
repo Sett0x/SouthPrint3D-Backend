@@ -21,7 +21,7 @@ const productSchema = new Schema({
   images: [{ type: String, required: true }],
 }, { timestamps: true });
 
-// Hook para calcular el totalPrice antes de guardar el producto
+// Hook para calcular el totalPrice & ivaPrice antes de guardar el producto
 productSchema.pre('save', function (next) {
   this.totalPrice = this.price + (this.price * this.iva);
 
