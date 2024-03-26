@@ -1,43 +1,82 @@
-import Cart from '../models/cart.js';
+import { validationResult } from 'express-validator';
+import * as CartDBService from '../services/database/cart-db-service.js';
 
-export const addToCart = async (req, res) => {
+/**
+ * Agrega un producto al carrito.
+ * @param {Object} req - Objeto de solicitud.
+ * @param {Object} res - Objeto de respuesta.
+ */
+export async function addToCart(req, res) {
+  const { userId, productId } = req.body;
   try {
-    const { userId, productId } = req.body;
-    const existingCartItem = await Cart.findOne({ userId, productId });
-
-    if (existingCartItem) {
-      // Si el producto ya está en el carrito, incrementa la cantidad
-      existingCartItem.quantity++;
-      await existingCartItem.save();
-    } else {
-      // Si el producto no está en el carrito, crea un nuevo elemento en el carrito
-      await Cart.create({ userId, productId });
-    }
-
+    await CartDBService.addToCart(userId, productId);
     res.status(200).json({ success: true, message: 'Product added to cart successfully' });
   } catch (error) {
+    console.error(error);
     res.status(500).json({ success: false, message: 'Internal server error' });
   }
-};
+}
 
-export const removeFromCart = async (req, res) => {
+/**
+ * Elimina un producto del carrito.
+ * @param {Object} req - Objeto de solicitud.
+ * @param {Object} res - Objeto de respuesta.
+ */
+export async function removeFromCart(req, res) {
+  const { userId, productId } = req.body;
   try {
-    const { userId, productId } = req.body;
-    const existingCartItem = await Cart.findOne({ userId, productId });
-
-    if (existingCartItem) {
-      if (existingCartItem.quantity > 1) {
-        // Si la cantidad del producto es mayor que 1, disminuye la cantidad
-        existingCartItem.quantity--;
-        await existingCartItem.save();
-      } else {
-        // Si la cantidad del producto es 1, elimina el elemento del carrito
-        await existingCartItem.remove();
-      }
-    }
-
+    await CartDBService.removeFromCart(userId, productId);
     res.status(200).json({ success: true, message: 'Product removed from cart successfully' });
   } catch (error) {
+    console.error(error);
     res.status(500).json({ success: false, message: 'Internal server error' });
   }
-};
+}
+
+/**
+ * Actualiza la cantidad de un producto en el carrito.
+ * @param {Object} req - Objeto de solicitud.
+ * @param {Object} res - Objeto de respuesta.
+ */
+export async function updateCartItemQuantity(req, res) {
+  const { userId, productId, quantity } = req.body;
+  try {
+    await CartDBService.updateCartItemQuantity(userId, productId, quantity);
+    res.status(200).json({ success: true, message: 'Cart item quantity updated successfully' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: 'Internal server error' });
+  }
+}
+
+/**
+ * Obtiene todos los elementos del carrito de un usuario.
+ * @param {Object} req - Objeto de solicitud.
+ * @param {Object} res - Objeto de respuesta.
+ */
+export async function getCartItems(req, res) {
+  const { userId } = req.body;
+  try {
+    const cartItems = await CartDBService.getCartItems(userId);
+    res.status(200).json({ success: true, cartItems });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: 'Internal server error' });
+  }
+}
+
+/**
+ * Elimina todos los elementos del carrito de un usuario.
+ * @param {Object} req - Objeto de solicitud.
+ * @param {Object} res - Objeto de respuesta.
+ */
+export async function clearCart(req, res) {
+  const { userId } = req.body;
+  try {
+    await CartDBService.clearCart(userId);
+    res.status(200).json({ success: true, message: 'Cart cleared successfully' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: 'Internal server error' });
+  }
+}
