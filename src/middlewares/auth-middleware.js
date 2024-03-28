@@ -3,13 +3,17 @@ import jwt from "jsonwebtoken";
 import logger from "../utils/logger.js";
 import User from '../models/user.js';
 import config from "../config.js";
+import { errorMiddleware } from '../middlewares/error-middleware.js';
 
+// Middleware para verificar si se proporciona un token válido
 export function checkToken(req, res, next) {
   console.log('[checkToken] Token:', req.headers.authorization)
 
   const { authorization } = req.headers;
 
-  if (!authorization) throw HttpStatusError(401, 'No token provided');
+  if (!authorization) {
+    throw new HttpStatusError(401, 'No token provided');
+  }
 
   const [_bearer, token] = authorization.split(' ');
 
@@ -18,12 +22,13 @@ export function checkToken(req, res, next) {
     req.user = objectToken;
   } catch (err) {
     logger.error(err.message);
-    throw HttpStatusError(401, 'Invalid token');
+    throw new HttpStatusError(401, 'Invalid token');
   }
 
   next();
 }
 
+// Middleware para verificar si el usuario es administrador
 export async function isAdmin(req, res, next) {
   try {
     const { authorization } = req.headers;
@@ -38,6 +43,7 @@ export async function isAdmin(req, res, next) {
 
     const userId = decodedToken.id;
     const user = await User.findById(userId);
+
     if (user.role === 'admin') {
       req.user = user;
       return next();
@@ -46,7 +52,6 @@ export async function isAdmin(req, res, next) {
     throw new HttpStatusError(403, 'Acceso no autorizado');
   } catch (error) {
     logger.error(error.message);
-    next(error);
+    errorMiddleware(error, req, res, next); // Manejar el error utilizando errorMiddleware
   }
 }
-
