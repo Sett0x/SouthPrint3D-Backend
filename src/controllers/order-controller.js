@@ -1,6 +1,8 @@
 // order-controller.js
 import Order from '../models/order.js';
-import User from '../models/user.js'; // Importar el modelo de usuario
+import Cart from '../models/cart.js';
+import User from '../models/user.js';
+import * as CartDBService from '../services/database/cart-db-service.js';
 import * as OrderDBService from '../services/database/order-db-service.js';
 
 // Obtener todos los pedidos del usuario autenticado
@@ -18,12 +20,14 @@ export async function getUserOrders(req, res) {
 export async function createOrder(req, res) {
   try {
     const order = await OrderDBService.createOrder(req.user.id, req.body.products, req.body.shippingAddress);
+    await CartDBService.clearCart(req.user.id); // Limpiar el carrito después de crear la orden
     res.status(201).json(order);
   } catch (error) {
     console.error('Error al crear el pedido:', error);
     res.status(500).json({ message: 'Error al crear el pedido' });
   }
 }
+
 
 // Obtener un pedido por su ID
 export async function getOrderById(req, res) {

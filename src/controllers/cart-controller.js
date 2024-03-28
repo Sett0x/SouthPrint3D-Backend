@@ -1,5 +1,6 @@
 import { validationResult, body } from 'express-validator';
 import * as CartDBService from '../services/database/cart-db-service.js';
+import * as OrderDBService from '../services/database/order-db-service.js';
 import { errorMiddleware } from '../middlewares/error-middleware.js';
 
 const validationRules = [
@@ -84,6 +85,18 @@ export async function clearCart(req, res) {
   try {
     await CartDBService.clearCart(userId);
     res.status(200).json({ success: true, message: 'Cart cleared successfully' });
+  } catch (error) {
+    errorMiddleware(error, req, res);
+  }
+}
+
+export async function confirmOrder(req, res) {
+  const { userId, shippingAddress } = req.body;
+  try {
+    const cartItems = await CartDBService.getCartItems(userId);
+    const order = await OrderDBService.createOrder(userId, cartItems, shippingAddress);
+    await CartDBService.clearCart(userId);
+    res.status(200).json({ success: true, order, message: 'Order confirmed successfully' });
   } catch (error) {
     errorMiddleware(error, req, res);
   }
