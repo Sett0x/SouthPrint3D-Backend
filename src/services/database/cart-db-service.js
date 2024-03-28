@@ -1,41 +1,37 @@
 import Cart from '../../models/cart.js';
+import Product from '../../models/product.js';
+import mongoose from 'mongoose';
 
-/**
- * Agrega un producto al carrito.
- * @param {string} userId - ID del usuario.
- * @param {string} productId - ID del producto.
- */
-export async function addToCart(userId, productId) {
-  // Validar el userId y productId
+export async function addToCart(userId, productId, quantity) {
   if (!isValidObjectId(userId)) {
     throw new ValidationError('Invalid userId');
   }
   if (!isValidObjectId(productId)) {
     throw new ValidationError('Invalid productId');
   }
+  if (!Number.isInteger(quantity) || quantity < 1) {
+    throw new ValidationError('Quantity must be a positive integer');
+  }
 
   try {
     let cartItem = await Cart.findOne({ userId, productId });
 
     if (cartItem) {
-      cartItem.quantity++;
+      cartItem.quantity += quantity;
     } else {
-      cartItem = new Cart({ userId, productId });
+      cartItem = new Cart({ userId, productId, quantity });
     }
 
     await cartItem.save();
+
+    await updateCartTotalPrice(userId);
+
   } catch (error) {
     throw new DatabaseError('Error adding product to cart: ' + error.message);
   }
 }
 
-/**
- * Elimina un producto del carrito.
- * @param {string} userId - ID del usuario.
- * @param {string} productId - ID del producto.
- */
 export async function removeFromCart(userId, productId) {
-  // Validar el userId y productId
   if (!isValidObjectId(userId)) {
     throw new ValidationError('Invalid userId');
   }
@@ -54,24 +50,23 @@ export async function removeFromCart(userId, productId) {
         await cartItem.remove();
       }
     }
+
+    await updateCartTotalPrice(userId);
+
   } catch (error) {
     throw new DatabaseError('Error removing product from cart: ' + error.message);
   }
 }
 
-/**
- * Actualiza la cantidad de un producto en el carrito.
- * @param {string} userId - ID del usuario.
- * @param {string} productId - ID del producto.
- * @param {number} quantity - Nueva cantidad del producto.
- */
 export async function updateCartItemQuantity(userId, productId, quantity) {
-  // Validar el userId y productId
   if (!isValidObjectId(userId)) {
     throw new ValidationError('Invalid userId');
   }
   if (!isValidObjectId(productId)) {
     throw new ValidationError('Invalid productId');
+  }
+  if (!Number.isInteger(quantity) || quantity < 1) {
+    throw new ValidationError('Quantity must be a positive integer');
   }
 
   try {
@@ -81,18 +76,15 @@ export async function updateCartItemQuantity(userId, productId, quantity) {
       cartItem.quantity = quantity;
       await cartItem.save();
     }
+
+    await updateCartTotalPrice(userId);
+
   } catch (error) {
     throw new DatabaseError('Error updating cart item quantity: ' + error.message);
   }
 }
 
-/**
- * Obtiene todos los elementos del carrito de un usuario.
- * @param {string} userId - ID del usuario.
- * @returns {Array} - Array de elementos del carrito.
- */
 export async function getCartItems(userId) {
-  // Validar el userId
   if (!isValidObjectId(userId)) {
     throw new ValidationError('Invalid userId');
   }
@@ -105,30 +97,41 @@ export async function getCartItems(userId) {
   }
 }
 
-/**
- * Elimina todos los elementos del carrito de un usuario.
- * @param {string} userId - ID del usuario.
- */
 export async function clearCart(userId) {
-  // Validar el userId
   if (!isValidObjectId(userId)) {
     throw new ValidationError('Invalid userId');
   }
 
   try {
     await Cart.deleteMany({ userId });
+    await updateCartTotalPrice(userId);
+
   } catch (error) {
     throw new DatabaseError('Error clearing cart: ' + error.message);
   }
 }
 
-/**
- * Función para validar si un ID es válido.
- * @param {string} id - ID a validar.
- * @returns {boolean} - true si el ID es válido, false de lo contrario.
- */
+async function updateCartTotalPrice(userId) {
+  try {
+    const cartItems = await Cart.find({ userId });
+    let totalCartPrice = 0;
+    const productIds = cartItems.map(cartItem => cartItem.productId);
+    const products = await Product.find({ _id: { $in: productIds } });
+
+    for (const cartItem of cartItems) {
+      const product = products.find(p => p._id.equals(cartItem.productId));
+      if (product) {
+        totalCartPrice += product.totalPrice * cartItem.quantity;
+      }
+    }
+
+    await Cart.updateOne({ userId }, { totalPrice: totalCartPrice });
+
+  } catch (error) {
+    throw new DatabaseError('Error updating cart total price: ' + error.message);
+  }
+}
+
 function isValidObjectId(id) {
-  // Implementa aquí la lógica de validación del ObjectId.
-  // Por ejemplo, puedes usar una función proporcionada por mongoose u otra biblioteca de validación.
   return mongoose.Types.ObjectId.isValid(id);
 }

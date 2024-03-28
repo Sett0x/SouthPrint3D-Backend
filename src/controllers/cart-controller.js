@@ -1,9 +1,7 @@
-// cart-controller.js
-
 import { validationResult, body } from 'express-validator';
 import * as CartDBService from '../services/database/cart-db-service.js';
+import { errorMiddleware } from '../middlewares/error-middleware.js';
 
-// Definir reglas de validación para los campos del carrito
 const validationRules = [
   body('userId').notEmpty().withMessage('Invalid userId'),
   body('productId').notEmpty().withMessage('Invalid productId'),
@@ -11,16 +9,8 @@ const validationRules = [
   // Agregar más reglas de validación según sea necesario
 ];
 
-/**
- * Agrega un producto al carrito.
- * @param {Object} req - Objeto de solicitud.
- * @param {Object} res - Objeto de respuesta.
- */
 export async function addToCart(req, res) {
-  // Ejecutar las reglas de validación
   await Promise.all(validationRules.map(validation => validation.run(req)));
-
-  // Verificar si hay errores de validación
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(400).json({ errors: errors.array() });
@@ -31,21 +21,12 @@ export async function addToCart(req, res) {
     await CartDBService.addToCart(userId, productId, quantity);
     res.status(200).json({ success: true, message: 'Product added to cart successfully' });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ success: false, message: 'Internal server error' });
+    errorMiddleware(error, req, res);
   }
 }
 
-/**
- * Elimina un producto del carrito.
- * @param {Object} req - Objeto de solicitud.
- * @param {Object} res - Objeto de respuesta.
- */
 export async function removeFromCart(req, res) {
-  // Ejecutar las reglas de validación
   await Promise.all(validationRules.slice(0, 2).map(validation => validation.run(req)));
-
-  // Verificar si hay errores de validación
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(400).json({ errors: errors.array() });
@@ -56,21 +37,12 @@ export async function removeFromCart(req, res) {
     await CartDBService.removeFromCart(userId, productId);
     res.status(200).json({ success: true, message: 'Product removed from cart successfully' });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ success: false, message: 'Internal server error' });
+    errorMiddleware(error, req, res);
   }
 }
 
-/**
- * Actualiza la cantidad de un producto en el carrito.
- * @param {Object} req - Objeto de solicitud.
- * @param {Object} res - Objeto de respuesta.
- */
 export async function updateCartItemQuantity(req, res) {
-  // Ejecutar las reglas de validación
   await Promise.all(validationRules.slice(0, 2).concat(body('quantity').isInt({ min: 1 })).map(validation => validation.run(req)));
-
-  // Verificar si hay errores de validación
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(400).json({ errors: errors.array() });
@@ -81,21 +53,12 @@ export async function updateCartItemQuantity(req, res) {
     await CartDBService.updateCartItemQuantity(userId, productId, quantity);
     res.status(200).json({ success: true, message: 'Cart item quantity updated successfully' });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ success: false, message: 'Internal server error' });
+    errorMiddleware(error, req, res);
   }
 }
 
-/**
- * Obtiene todos los elementos del carrito de un usuario.
- * @param {Object} req - Objeto de solicitud.
- * @param {Object} res - Objeto de respuesta.
- */
 export async function getCartItems(req, res) {
-  // Ejecutar las reglas de validación
   await Promise.all(validationRules.slice(0, 1).map(validation => validation.run(req)));
-
-  // Verificar si hay errores de validación
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(400).json({ errors: errors.array() });
@@ -106,21 +69,12 @@ export async function getCartItems(req, res) {
     const cartItems = await CartDBService.getCartItems(userId);
     res.status(200).json({ success: true, cartItems });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ success: false, message: 'Internal server error' });
+    errorMiddleware(error, req, res);
   }
 }
 
-/**
- * Elimina todos los elementos del carrito de un usuario.
- * @param {Object} req - Objeto de solicitud.
- * @param {Object} res - Objeto de respuesta.
- */
 export async function clearCart(req, res) {
-  // Ejecutar las reglas de validación
   await Promise.all(validationRules.slice(0, 1).map(validation => validation.run(req)));
-
-  // Verificar si hay errores de validación
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(400).json({ errors: errors.array() });
@@ -131,7 +85,6 @@ export async function clearCart(req, res) {
     await CartDBService.clearCart(userId);
     res.status(200).json({ success: true, message: 'Cart cleared successfully' });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ success: false, message: 'Internal server error' });
+    errorMiddleware(error, req, res);
   }
 }

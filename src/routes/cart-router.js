@@ -1,5 +1,3 @@
-// cart-router.js
-
 import express from 'express';
 import { addToCart, removeFromCart, updateCartItemQuantity, getCartItems, clearCart } from '../controllers/cart-controller.js';
 import { checkToken } from '../middlewares/auth-middleware.js';
