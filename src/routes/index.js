@@ -6,10 +6,12 @@ import ordersRouter from './order-router.js';
 import reviewRouter from './review-router.js';
 import cartRouter from './cart-router.js';
 import { login } from '../controllers/login-controller.js';
+import { logout } from '../controllers/logout-controller.js';
 
 const router = express.Router();
 
 router.post('/login', login);
+router.post('/logout', logout);
 
 router.use('/products', productsRouter);
 router.use('/users', usersRouter);
