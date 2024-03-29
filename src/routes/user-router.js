@@ -15,7 +15,7 @@ router.get('', checkToken, isAdmin, getUsers);
 
 // Rutas para acceder y modificar el propio perfil del usuario
 router.get('/:id', checkToken, getUserById);
-router.put('/:id', checkToken, updateUser); // Los usuarios pueden modificar su propio perfil
+router.patch('/:id', checkToken, updateUser); // Los usuarios pueden modificar su propio perfil
 router.delete('/:id', checkToken, deleteUser); // Los usuarios pueden eliminar su propia cuenta
 router.post('/register', createUser);
 

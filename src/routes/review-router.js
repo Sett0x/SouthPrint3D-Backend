@@ -16,7 +16,7 @@ router.use(checkToken);
 router.get('', isAdmin, getAllReviews);
 router.get('/:productId', getProductReviews);
 router.post('/:productId', createReview);
-router.put('/:id', updateReview);
+router.patch('/:id', updateReview);
 router.delete('/:id', deleteReview);
 
 export default router;
