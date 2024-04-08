@@ -1,4 +1,3 @@
-// models/review.js
 import mongoose from 'mongoose';
 
 const { Schema, model } = mongoose;
@@ -6,8 +5,12 @@ const { Schema, model } = mongoose;
 const reviewSchema = new Schema({
   user: { type: Schema.Types.ObjectId, ref: 'User', required: true },
   product: { type: Schema.Types.ObjectId, ref: 'Product', required: true },
-  rating: { type: Number, required: true, min: 1, max: 5 },
-  comment: { type: String },
+  title: { type: String, required: true, minlength: 2, maxlength: 30 },
+  rating: { type: Number, required: true, min: 1, max: 5, validate: {
+    validator: Number.isInteger,
+    message: 'La calificación debe ser un número entero'
+  }},
+  comment: { type: String, required: true, minlength: 10, maxlength: 500 },
 }, { timestamps: true });
 
 // Middleware para calcular y actualizar la media de puntuación del producto asociado

@@ -1,6 +1,15 @@
-// services/database/review-db-service.js
 import Review from '../../models/review.js';
 import logger from '../../utils/logger.js';
+import { ValidationError } from 'common-errors';
+
+// Reglas de validación para la creación de reseñas
+const createReviewValidationRules = [
+  body('user').notEmpty().withMessage('El ID de usuario es requerido'),
+  body('product').notEmpty().withMessage('El ID del producto es requerido'),
+  body('title').isLength({ min: 2, max: 30 }).withMessage('El título debe tener entre 2 y 30 caracteres'),
+  body('rating').isInt({ min: 1, max: 5 }).withMessage('La calificación debe estar entre 1 y 5'),
+  body('comment').isLength({ min: 10, max: 500 }).withMessage('El comentario debe tener entre 10 y 500 caracteres')
+];
 
 export async function getAllReviews() {
   try {
@@ -22,9 +31,18 @@ export async function getProductReviews(productId) {
   }
 }
 
-export async function createReview({ user, product, rating, comment }) {
+export async function createReview({ user, product, title, rating, comment }) {
+  // Ejecutar las reglas de validación
+  createReviewValidationRules.forEach(validation => validation.run(req));
+
+  // Verificar si hay errores de validación
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    throw new ValidationError(errors.array());
+  }
+
   try {
-    const review = await Review.create({ user, product, rating, comment });
+    const review = await Review.create({ user, product, title, rating, comment });
     return review;
   } catch (error) {
     logger.error(`Error al crear la reseña: ${error.message}`);
