@@ -94,6 +94,20 @@ export async function confirmOrder(req, res) {
   const { userId, shippingAddress } = req.body;
   try {
     const cartItems = await CartDBService.getCartItems(userId);
+    if (cartItems.length === 0) {
+      return res.status(400).json({ success: false, message: 'Cart is empty' });
+    }
+
+    for (const item of cartItems) {
+      const product = await ProductDBService.getProduct(item.productId);
+      if (!product) {
+        return res.status(404).json({ success: false, message: 'Product not found' });
+      }
+      if (product.stock < item.quantity) {
+        return res.status(400).json({ success: false, message: 'Insufficient stock for product ' + product.name });
+      }
+    }
+
     const order = await OrderDBService.createOrder(userId, cartItems, shippingAddress);
     await CartDBService.clearCart(userId);
     res.status(200).json({ success: true, order, message: 'Order confirmed successfully' });
