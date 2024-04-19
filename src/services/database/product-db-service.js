@@ -55,7 +55,8 @@ export async function updateProduct(id, productData) {
 
 export async function deleteProduct(id) {
   try {
-    await Product.findByIdAndDelete(id);
+    const deletedProduct = await Product.findByIdAndDelete(id);
+    return deletedProduct; // Devuelve el producto eliminado
   } catch (error) {
     throw new Error('Error al eliminar el producto: ' + error.message);
   }
