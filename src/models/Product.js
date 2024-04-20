@@ -11,7 +11,7 @@ const productSchema = new Schema({
   ivaPrice: { type: Number, required: false },
   discount: { type: Number, default: 0, min: 0, max: 100 },
   stock: { type: Number, required: true, min: 0 },
-  category: { type: String, required: true },
+  categories: [{ type: String, required: true }],
   dimensions: {
     width: { type: Number, required: true, min: 0 },
     height: { type: Number, required: true, min: 0 },
@@ -20,6 +20,9 @@ const productSchema = new Schema({
   averageRating: { type: Number, default: 0, min: 0, max: 5 },
   images: [{ type: String, required: true }],
 }, { timestamps: true });
+
+// Definir el índice de texto completo en los campos 'name', 'description' y 'categories'
+productSchema.index({ name: 'text', description: 'text', categories: 'text' });
 
 // Hook para calcular el totalPrice & ivaPrice antes de guardar el producto
 productSchema.pre('save', function (next) {

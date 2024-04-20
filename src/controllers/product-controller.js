@@ -68,8 +68,8 @@ export async function updateProduct(req, res) {
 export async function deleteProduct(req, res) {
   const { id } = req.params;
   try {
-    await ProductDBService.deleteProduct(id);
-    res.status(204).end();
+    const deletedProduct = await ProductDBService.deleteProduct(id);
+    res.status(200).json({ message: 'Producto eliminado exitosamente', deletedProduct });
   } catch (error) {
     res.status(400).json({ message: 'Error al eliminar el producto: ' + error.message });
   }
