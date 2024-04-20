@@ -11,7 +11,7 @@ const productSchema = new Schema({
   ivaPrice: { type: Number, required: false },
   discount: { type: Number, default: 0, min: 0, max: 100 },
   stock: { type: Number, required: true, min: 0 },
-  category: { type: String, required: true },
+  categories: [{ type: String, required: true }],
   dimensions: {
     width: { type: Number, required: true, min: 0 },
     height: { type: Number, required: true, min: 0 },
