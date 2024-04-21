@@ -1,7 +1,7 @@
 import Product from '../../models/product.js';
 
 export async function getProducts(queryParams) {
-  const { id, name, category, priceMin, priceMax, minStock } = queryParams;
+  const { id, name, category, priceMin, priceMax, minStock, search, totalPrice, averageRating, sortField, sortOrder } = queryParams;
   let query = {};
 
   if (id) {
@@ -9,11 +9,11 @@ export async function getProducts(queryParams) {
   }
 
   if (name) {
-    query.name = { $regex: name, $options: 'i' };
+    query.name = { $regex: new RegExp(name, 'i') };
   }
 
   if (category) {
-    query.category = category;
+    query.categories = { $regex: new RegExp(category, 'i') };
   }
 
   if (priceMin || priceMax) {
@@ -26,13 +26,37 @@ export async function getProducts(queryParams) {
     query.stock = { $gte: parseInt(minStock) };
   }
 
+  if (search) {
+    query.$or = [
+      { name: { $regex: new RegExp(search, 'i') } },
+      { description: { $regex: new RegExp(search, 'i') } },
+      { categories: { $regex: new RegExp(search, 'i') } }
+    ];
+  }
+
+  if (totalPrice) {
+    query.totalPrice = parseFloat(totalPrice);
+  }
+
+  if (averageRating) {
+    query.averageRating = { $gte: parseFloat(averageRating) };
+  }
+
   try {
-    const products = await Product.find(query);
+    let productsQuery = Product.find(query).collation({ locale: 'en', strength: 2 });
+
+    if (sortField && sortOrder) {
+      const sortOptions = { [sortField]: sortOrder === 'asc' ? 1 : -1 };
+      productsQuery = productsQuery.sort(sortOptions);
+    }
+
+    const products = await productsQuery.exec();
     return products;
   } catch (error) {
-    throw new Error('Error al obtener los productos: ' + error.message);
+    throw new Error(`Error al obtener los productos: ${error.message}`);
   }
 }
+
 
 export async function createProduct(productData) {
   try {
@@ -55,7 +79,8 @@ export async function updateProduct(id, productData) {
 
 export async function deleteProduct(id) {
   try {
-    await Product.findByIdAndDelete(id);
+    const deletedProduct = await Product.findByIdAndDelete(id);
+    return deletedProduct; // Devuelve el producto eliminado
   } catch (error) {
     throw new Error('Error al eliminar el producto: ' + error.message);
   }
