@@ -17,7 +17,7 @@ export async function getProducts(req, res, next) {
     const products = await ProductDBService.getProducts(queryParams);
     res.json(products);
   } catch (error) {
-    next(error); // Pasar el error al siguiente middleware
+    next(error);
   }
 }
 
@@ -30,15 +30,14 @@ export async function getProductById(req, res, next) {
     }
     res.json(product);
   } catch (error) {
-    next(error); // Pasar el error al siguiente middleware
+    next(error);
   }
 }
 
 export async function createProduct(req, res) {
-  // Ejecutar las reglas de validación
+
   await Promise.all(validationRules.map(validation => validation.run(req)));
 
-  // Verificar si hay errores de validación
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(400).json({ errors: errors.array() });
