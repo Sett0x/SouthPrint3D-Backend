@@ -12,10 +12,24 @@ const createReviewValidationRules = [
   body('comment').isLength({ min: 10, max: 500 }).withMessage('El comentario debe tener entre 10 y 500 caracteres')
 ];
 
-export async function getAllReviews() {
+export async function getAllReviews(filter = {}, page = 1, perPage = 10) {
   try {
-    const reviews = await Review.find().populate('user', 'username');
-    return reviews;
+    const totalCount = await Review.countDocuments(filter);
+    const totalPages = Math.ceil(totalCount / perPage);
+    const currentPage = Math.min(Math.max(page, 1), totalPages);
+
+    const reviews = await Review.find(filter)
+      .populate('user', 'username')
+      .skip((currentPage - 1) * perPage)
+      .limit(perPage);
+
+    return {
+      currentPage,
+      totalPages,
+      totalCount,
+      perPage,
+      reviews
+    };
   } catch (error) {
     logger.error(`Error al obtener todas las reseñas: ${error.message}`);
     throw new Error('Error al obtener todas las reseñas');
