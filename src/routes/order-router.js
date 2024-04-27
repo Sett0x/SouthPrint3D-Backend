@@ -4,11 +4,8 @@ import {
   createOrder,
   getOrderById,
   updateOrderStatus,
-  searchOrders, // Agrega la función para buscar pedidos
   deleteOrder,
-  getUserOrdersByStatus,
-  getOrderHistoryByDate,
-  searchOrderHistoryByProduct
+  searchOrders,
 } from '../controllers/order-controller.js';
 import { checkToken, isAdmin } from '../middlewares/auth-middleware.js';
 
@@ -16,13 +13,11 @@ const router = express.Router();
 
 router.use(checkToken);
 
-router.get('', getUserOrders);
-router.post('', createOrder);
+router.get('/', getUserOrders);
+router.post('/', createOrder);
 router.get('/:id', getOrderById);
-router.patch('/:id/status', isAdmin, updateOrderStatus); // Se cambia 'put' por 'patch'
+router.patch('/:id/status', isAdmin, updateOrderStatus); // Cambiado de 'put' a 'patch'
 router.delete('/:id', isAdmin, deleteOrder);
-router.get('/status/:status', getUserOrdersByStatus);
-router.get('/history', getOrderHistoryByDate);
-router.get('/history/search', searchOrderHistoryByProduct);
+router.get('/search', searchOrders); // Endpoint para buscar órdenes
 
 export default router;

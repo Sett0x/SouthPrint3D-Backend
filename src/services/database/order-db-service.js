@@ -1,7 +1,10 @@
 import Order from '../../models/order.js';
 
-export async function getUserOrders(userId) {
-  return await Order.find({ userId });
+export async function getUserOrders(userId, page = 1, perPage = 10) {
+  const skip = (page - 1) * perPage;
+  return await Order.find({ userId })
+    .skip(skip)
+    .limit(perPage);
 }
 
 export async function createOrder(userId, products, shippingAddress) {
@@ -49,20 +52,45 @@ export async function updateOrderStatus(orderId, userId, status) {
   return order;
 }
 
-export async function searchOrders(userId, query) {
+export async function searchOrders(userId, query, page = 1, perPage = 10) {
   const searchQuery = { userId };
+
+  // Filtrado por fecha
   if (query.fromDate && query.toDate) {
     searchQuery.date = { $gte: new Date(query.fromDate), $lte: new Date(query.toDate) };
   }
+
+  // Filtrado por precio total
   if (query.minTotalPrice || query.maxTotalPrice) {
     searchQuery.totalPrice = {};
     if (query.minTotalPrice) searchQuery.totalPrice.$gte = parseFloat(query.minTotalPrice);
     if (query.maxTotalPrice) searchQuery.totalPrice.$lte = parseFloat(query.maxTotalPrice);
   }
+
+  // Filtrado por producto
   if (query.productId) {
     searchQuery['products.productId'] = query.productId;
   }
-  return await Order.find(searchQuery);
+
+  try {
+    const totalCount = await Order.countDocuments(searchQuery);
+    const totalPages = Math.ceil(totalCount / perPage);
+    const currentPage = Math.min(Math.max(page, 1), totalPages);
+
+    const orders = await Order.find(searchQuery)
+      .skip((currentPage - 1) * perPage)
+      .limit(perPage);
+
+    return {
+      currentPage,
+      totalPages,
+      totalCount,
+      perPage,
+      orders
+    };
+  } catch (error) {
+    throw new Error('Error al buscar pedidos: ' + error.message);
+  }
 }
 
 export async function deleteOrder(orderId, userId) {
@@ -74,22 +102,4 @@ export async function deleteOrder(orderId, userId) {
     throw new Error('Acceso no autorizado para eliminar el pedido');
   }
   await order.remove();
-}
-
-export async function getUserOrdersByStatus(userId, status) {
-  return await Order.find({ userId, status });
-}
-
-export async function getOrderHistoryByDate(userId, query) {
-  return await Order.find({
-    userId,
-    createdAt: { $gte: new Date(query.fromDate), $lte: new Date(query.toDate) }
-  });
-}
-
-export async function searchOrderHistoryByProduct(userId, productName) {
-  return await Order.find({
-    userId,
-    'products.name': { $regex: productName, $options: 'i' }
-  });
 }
