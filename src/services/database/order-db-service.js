@@ -4,12 +4,21 @@ export async function getUserOrders(userId, filters, page = 1, perPage = 10) {
   const skip = (page - 1) * perPage;
   const query = { userId };
 
-  // Aplicar filtros si están presentes
   if (filters) {
     if (filters.status) {
       query.status = filters.status;
     }
-    // Puedes agregar más filtros aquí según sea necesario
+    if (filters.fromDate && filters.toDate) {
+      query.date = { $gte: new Date(filters.fromDate), $lte: new Date(filters.toDate) };
+    }
+    if (filters.minTotalPrice || filters.maxTotalPrice) {
+      query.totalPrice = {};
+      if (filters.minTotalPrice) query.totalPrice.$gte = parseFloat(filters.minTotalPrice);
+      if (filters.maxTotalPrice) query.totalPrice.$lte = parseFloat(filters.maxTotalPrice);
+    }
+    if (filters.productId) {
+      query['products.productId'] = filters.productId;
+    }
   }
 
   try {
@@ -78,24 +87,21 @@ export async function updateOrderStatus(orderId, userId, status) {
   return order;
 }
 
-export async function searchOrders(userId, query, page = 1, perPage = 10) {
+export async function searchOrders(userId, filters, page = 1, perPage = 10) {
   const searchQuery = { userId };
 
-  // Filtrado por fecha
-  if (query.fromDate && query.toDate) {
-    searchQuery.date = { $gte: new Date(query.fromDate), $lte: new Date(query.toDate) };
-  }
-
-  // Filtrado por precio total
-  if (query.minTotalPrice || query.maxTotalPrice) {
-    searchQuery.totalPrice = {};
-    if (query.minTotalPrice) searchQuery.totalPrice.$gte = parseFloat(query.minTotalPrice);
-    if (query.maxTotalPrice) searchQuery.totalPrice.$lte = parseFloat(query.maxTotalPrice);
-  }
-
-  // Filtrado por producto
-  if (query.productId) {
-    searchQuery['products.productId'] = query.productId;
+  if (filters) {
+    if (filters.fromDate && filters.toDate) {
+      searchQuery.date = { $gte: new Date(filters.fromDate), $lte: new Date(filters.toDate) };
+    }
+    if (filters.minTotalPrice || filters.maxTotalPrice) {
+      searchQuery.totalPrice = {};
+      if (filters.minTotalPrice) searchQuery.totalPrice.$gte = parseFloat(filters.minTotalPrice);
+      if (filters.maxTotalPrice) searchQuery.totalPrice.$lte = parseFloat(filters.maxTotalPrice);
+    }
+    if (filters.productId) {
+      searchQuery['products.productId'] = filters.productId;
+    }
   }
 
   try {
