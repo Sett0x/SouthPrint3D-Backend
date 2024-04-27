@@ -3,9 +3,9 @@ import * as OrderDBService from '../services/database/order-db-service.js';
 
 export async function getUserOrders(req, res) {
   const userId = req.user.id;
-  const { page = 1, perPage = 10 } = req.query;
+  const { page = 1, perPage = 10, ...filters } = req.query; // Obtener filtros y paginación de la solicitud
   try {
-    const result = await OrderDBService.getUserOrders(userId, page, perPage);
+    const result = await OrderDBService.getUserOrders(userId, filters, page, perPage); // Pasar filtros y paginación al servicio
     res.json(result);
   } catch (error) {
     console.error('Error al obtener los pedidos del usuario:', error);

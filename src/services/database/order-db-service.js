@@ -1,10 +1,36 @@
 import Order from '../../models/order.js';
 
-export async function getUserOrders(userId, page = 1, perPage = 10) {
+export async function getUserOrders(userId, filters, page = 1, perPage = 10) {
   const skip = (page - 1) * perPage;
-  return await Order.find({ userId })
-    .skip(skip)
-    .limit(perPage);
+  const query = { userId };
+
+  // Aplicar filtros si están presentes
+  if (filters) {
+    if (filters.status) {
+      query.status = filters.status;
+    }
+    // Puedes agregar más filtros aquí según sea necesario
+  }
+
+  try {
+    const totalCount = await Order.countDocuments(query);
+    const totalPages = Math.ceil(totalCount / perPage);
+    const currentPage = Math.min(Math.max(page, 1), totalPages);
+
+    const orders = await Order.find(query)
+      .skip(skip)
+      .limit(perPage);
+
+    return {
+      currentPage,
+      totalPages,
+      totalCount,
+      perPage,
+      orders
+    };
+  } catch (error) {
+    throw new Error('Error al obtener los pedidos del usuario: ' + error.message);
+  }
 }
 
 export async function createOrder(userId, products, shippingAddress) {
