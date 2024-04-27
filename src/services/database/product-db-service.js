@@ -1,6 +1,6 @@
 import Product from '../../models/product.js';
 
-export async function getProducts(queryParams) {
+export async function getProducts(queryParams, page = 1, perPage = 10) {
   const { id, name, category, priceMin, priceMax, minStock, search, totalPrice, averageRating, sortField, sortOrder } = queryParams;
   let query = {};
 
@@ -50,13 +50,26 @@ export async function getProducts(queryParams) {
       productsQuery = productsQuery.sort(sortOptions);
     }
 
-    const products = await productsQuery.exec();
-    return products;
+    const totalCount = await Product.countDocuments(query);
+    const totalPages = Math.ceil(totalCount / perPage);
+    const currentPage = Math.min(Math.max(page, 1), totalPages);
+
+    const products = await productsQuery
+      .skip((currentPage - 1) * perPage)
+      .limit(perPage)
+      .exec();
+
+    return {
+      currentPage,
+      totalPages,
+      totalCount,
+      perPage,
+      products
+    };
   } catch (error) {
     throw new Error(`Error al obtener los productos: ${error.message}`);
   }
 }
-
 
 export async function createProduct(productData) {
   try {
