@@ -2,22 +2,68 @@
 import bcrypt from 'bcrypt';
 import User from '../../models/user.js';
 
-export async function getUsers(filters) {
-  try {
-    const query = buildQuery(filters);
-    const users = await User.find(query);
-    return users;
-  } catch (error) {
-    throw new Error('Error al obtener los usuarios');
-  }
-}
+export async function getUsers(queryParams, page = 1, perPage = 10) {
+  const { username, email, phone, state, province, city, zipcode, role, sortField, sortOrder } = queryParams;
+  let query = {};
 
-export async function getUserById(id) {
+  if (username) {
+    query.username = { $regex: new RegExp(username, 'i') };
+  }
+
+  if (email) {
+    query.email = { $regex: new RegExp(email, 'i') };
+  }
+
+  if (phone) {
+    query.phone = { $regex: new RegExp(phone, 'i') };
+  }
+
+  if (state) {
+    query['address.state'] = { $regex: new RegExp(state, 'i') };
+  }
+
+  if (province) {
+    query['address.province'] = { $regex: new RegExp(province, 'i') };
+  }
+
+  if (city) {
+    query['address.city'] = { $regex: new RegExp(city, 'i') };
+  }
+
+  if (zipcode) {
+    query['address.zipcode'] = { $regex: new RegExp(zipcode, 'i') };
+  }
+
+  if (role) {
+    query.role = role;
+  }
+
   try {
-    const user = await User.findById(id);
-    return user;
+    let usersQuery = User.find(query).collation({ locale: 'en', strength: 2 });
+
+    if (sortField && sortOrder) {
+      const sortOptions = { [sortField]: sortOrder === 'asc' ? 1 : -1 };
+      usersQuery = usersQuery.sort(sortOptions);
+    }
+
+    const totalCount = await User.countDocuments(query);
+    const totalPages = Math.ceil(totalCount / perPage);
+    const currentPage = Math.min(Math.max(page, 1), totalPages);
+
+    const users = await usersQuery
+      .skip((currentPage - 1) * perPage)
+      .limit(perPage)
+      .exec();
+
+    return {
+      currentPage,
+      totalPages,
+      totalCount,
+      perPage,
+      users
+    };
   } catch (error) {
-    throw new Error('Error al obtener el usuario');
+    throw new Error(`Error al obtener los usuarios: ${error.message}`);
   }
 }
 

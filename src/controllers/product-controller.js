@@ -12,9 +12,10 @@ const validationRules = [
 ];
 
 export async function getProducts(req, res, next) {
-  const queryParams = req.query;
+  const { page = 1, perPage = 10, ...queryParams } = req.query;
+
   try {
-    const products = await ProductDBService.getProducts(queryParams);
+    const products = await ProductDBService.getProducts(queryParams, parseInt(page), parseInt(perPage));
     res.json(products);
   } catch (error) {
     next(error);

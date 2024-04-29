@@ -14,11 +14,13 @@ const createReviewValidationRules = [
 ];
 
 export async function getAllReviews(req, res) {
+  const { page = 1, perPage = 10 } = req.query;
   try {
-    const reviews = await ReviewService.getAllReviews();
+    const reviews = await ReviewService.getAllReviews({}, page, perPage);
     res.status(200).json({ success: true, data: reviews });
   } catch (error) {
-    errorMiddleware(error, req, res); // Utilizar el middleware de manejo de errores
+    console.error('Error al obtener todas las reseñas:', error);
+    res.status(500).json({ success: false, message: 'Error al obtener todas las reseñas' });
   }
 }
 
