@@ -1,26 +1,23 @@
 // order-controller.js
-import Order from '../models/order.js';
-import Cart from '../models/cart.js';
-import User from '../models/user.js';
-import * as CartDBService from '../services/database/cart-db-service.js';
 import * as OrderDBService from '../services/database/order-db-service.js';
 
-// Obtener todos los pedidos del usuario autenticado
 export async function getUserOrders(req, res) {
+  const userId = req.user.id;
+  const { page = 1, perPage = 10, ...filters } = req.query; // Obtener filtros y paginación de la solicitud
   try {
-    const orders = await OrderDBService.getUserOrders(req.user.id);
-    res.json(orders);
+    const result = await OrderDBService.getUserOrders(userId, filters, page, perPage); // Pasar filtros y paginación al servicio
+    res.json(result);
   } catch (error) {
     console.error('Error al obtener los pedidos del usuario:', error);
     res.status(500).json({ message: 'Error al obtener los pedidos del usuario' });
   }
 }
 
-// Crear un nuevo pedido
 export async function createOrder(req, res) {
   try {
     const order = await OrderDBService.createOrder(req.user.id, req.body.products, req.body.shippingAddress);
-    await CartDBService.clearCart(req.user.id); // Limpiar el carrito después de crear la orden
+    // Limpiar el carrito después de crear la orden
+    await OrderDBService.clearCart(req.user.id);
     res.status(201).json(order);
   } catch (error) {
     console.error('Error al crear el pedido:', error);
@@ -28,8 +25,6 @@ export async function createOrder(req, res) {
   }
 }
 
-
-// Obtener un pedido por su ID
 export async function getOrderById(req, res) {
   try {
     const order = await OrderDBService.getOrderById(req.params.id, req.user.id);
@@ -40,7 +35,6 @@ export async function getOrderById(req, res) {
   }
 }
 
-// Actualizar el estado de un pedido
 export async function updateOrderStatus(req, res) {
   try {
     const order = await OrderDBService.updateOrderStatus(req.params.id, req.user.id, req.body.status);
@@ -51,18 +45,18 @@ export async function updateOrderStatus(req, res) {
   }
 }
 
-// Función para buscar pedidos por diferentes parámetros
 export async function searchOrders(req, res) {
+  const userId = req.user.id;
+  const { query, page = 1, perPage = 10 } = req.query;
   try {
-    const orders = await OrderDBService.searchOrders(req.user.id, req.query);
-    res.json(orders);
+    const result = await OrderDBService.searchOrders(userId, query, page, perPage);
+    res.json(result);
   } catch (error) {
     console.error('Error al buscar pedidos:', error);
     res.status(500).json({ message: 'Error al buscar pedidos' });
   }
 }
 
-// Eliminar un pedido
 export async function deleteOrder(req, res) {
   try {
     await OrderDBService.deleteOrder(req.params.id, req.user.id);
@@ -73,45 +67,4 @@ export async function deleteOrder(req, res) {
   }
 }
 
-// Obtener pedidos por estado
-export async function getUserOrdersByStatus(req, res) {
-  try {
-    const orders = await OrderDBService.getUserOrdersByStatus(req.user.id, req.params.status);
-    res.json(orders);
-  } catch (error) {
-    console.error('Error al obtener pedidos por estado:', error);
-    res.status(500).json({ message: 'Error al obtener pedidos por estado' });
-  }
-}
-
-// Obtener historial de pedidos por fecha
-export async function getOrderHistoryByDate(req, res) {
-  try {
-    const orders = await OrderDBService.getOrderHistoryByDate(req.user.id, req.query);
-    res.json(orders);
-  } catch (error) {
-    console.error('Error al obtener historial de pedidos por fecha:', error);
-    res.status(500).json({ message: 'Error al obtener historial de pedidos por fecha' });
-  }
-}
-
-// Buscar productos en historial de pedidos
-export async function searchOrderHistoryByProduct(req, res) {
-  try {
-    let productName = req.query.productName;
-
-    // Verificar si productName no es una cadena de texto
-    if (typeof productName !== 'string') {
-      // Intentar convertir productName a cadena de texto
-      productName = String(productName);
-    }
-
-    // Realizar la consulta a la base de datos utilizando productName
-    const orders = await OrderDBService.searchOrderHistoryByProduct(req.user.id, productName);
-    res.json(orders);
-  } catch (error) {
-    console.error('Error al buscar productos en historial de pedidos:', error);
-    res.status(500).json({ message: 'Error al buscar productos en historial de pedidos' });
-  }
-}
-
+// Eliminar getUserOrdersByStatus, getOrderHistoryByDate, searchOrderHistoryByProduct si no se utilizan

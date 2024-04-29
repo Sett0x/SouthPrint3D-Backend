@@ -19,9 +19,10 @@ const validationRules = [
 ];
 
 export async function getUsers(req, res) {
+  const { page = 1, perPage = 10, ...queryParams } = req.query;
+
   try {
-    const filters = req.query;
-    const users = await UserService.getUsers(filters);
+    const users = await UserService.getUsers(queryParams, parseInt(page), parseInt(perPage));
     res.json(users);
   } catch (error) {
     res.status(500).json({ message: error.message });

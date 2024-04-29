@@ -1,7 +1,45 @@
 import Order from '../../models/order.js';
 
-export async function getUserOrders(userId) {
-  return await Order.find({ userId });
+export async function getUserOrders(userId, filters, page = 1, perPage = 10) {
+  const skip = (page - 1) * perPage;
+  const query = { userId };
+
+  if (filters) {
+    if (filters.status) {
+      query.status = filters.status;
+    }
+    if (filters.fromDate && filters.toDate) {
+      query.date = { $gte: new Date(filters.fromDate), $lte: new Date(filters.toDate) };
+    }
+    if (filters.minTotalPrice || filters.maxTotalPrice) {
+      query.totalPrice = {};
+      if (filters.minTotalPrice) query.totalPrice.$gte = parseFloat(filters.minTotalPrice);
+      if (filters.maxTotalPrice) query.totalPrice.$lte = parseFloat(filters.maxTotalPrice);
+    }
+    if (filters.productId) {
+      query['products.productId'] = filters.productId;
+    }
+  }
+
+  try {
+    const totalCount = await Order.countDocuments(query);
+    const totalPages = Math.ceil(totalCount / perPage);
+    const currentPage = Math.min(Math.max(page, 1), totalPages);
+
+    const orders = await Order.find(query)
+      .skip(skip)
+      .limit(perPage);
+
+    return {
+      currentPage,
+      totalPages,
+      totalCount,
+      perPage,
+      orders
+    };
+  } catch (error) {
+    throw new Error('Error al obtener los pedidos del usuario: ' + error.message);
+  }
 }
 
 export async function createOrder(userId, products, shippingAddress) {
@@ -49,20 +87,42 @@ export async function updateOrderStatus(orderId, userId, status) {
   return order;
 }
 
-export async function searchOrders(userId, query) {
+export async function searchOrders(userId, filters, page = 1, perPage = 10) {
   const searchQuery = { userId };
-  if (query.fromDate && query.toDate) {
-    searchQuery.date = { $gte: new Date(query.fromDate), $lte: new Date(query.toDate) };
+
+  if (filters) {
+    if (filters.fromDate && filters.toDate) {
+      searchQuery.date = { $gte: new Date(filters.fromDate), $lte: new Date(filters.toDate) };
+    }
+    if (filters.minTotalPrice || filters.maxTotalPrice) {
+      searchQuery.totalPrice = {};
+      if (filters.minTotalPrice) searchQuery.totalPrice.$gte = parseFloat(filters.minTotalPrice);
+      if (filters.maxTotalPrice) searchQuery.totalPrice.$lte = parseFloat(filters.maxTotalPrice);
+    }
+    if (filters.productId) {
+      searchQuery['products.productId'] = filters.productId;
+    }
   }
-  if (query.minTotalPrice || query.maxTotalPrice) {
-    searchQuery.totalPrice = {};
-    if (query.minTotalPrice) searchQuery.totalPrice.$gte = parseFloat(query.minTotalPrice);
-    if (query.maxTotalPrice) searchQuery.totalPrice.$lte = parseFloat(query.maxTotalPrice);
+
+  try {
+    const totalCount = await Order.countDocuments(searchQuery);
+    const totalPages = Math.ceil(totalCount / perPage);
+    const currentPage = Math.min(Math.max(page, 1), totalPages);
+
+    const orders = await Order.find(searchQuery)
+      .skip((currentPage - 1) * perPage)
+      .limit(perPage);
+
+    return {
+      currentPage,
+      totalPages,
+      totalCount,
+      perPage,
+      orders
+    };
+  } catch (error) {
+    throw new Error('Error al buscar pedidos: ' + error.message);
   }
-  if (query.productId) {
-    searchQuery['products.productId'] = query.productId;
-  }
-  return await Order.find(searchQuery);
 }
 
 export async function deleteOrder(orderId, userId) {
@@ -74,22 +134,4 @@ export async function deleteOrder(orderId, userId) {
     throw new Error('Acceso no autorizado para eliminar el pedido');
   }
   await order.remove();
-}
-
-export async function getUserOrdersByStatus(userId, status) {
-  return await Order.find({ userId, status });
-}
-
-export async function getOrderHistoryByDate(userId, query) {
-  return await Order.find({
-    userId,
-    createdAt: { $gte: new Date(query.fromDate), $lte: new Date(query.toDate) }
-  });
-}
-
-export async function searchOrderHistoryByProduct(userId, productName) {
-  return await Order.find({
-    userId,
-    'products.name': { $regex: productName, $options: 'i' }
-  });
 }
