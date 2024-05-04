@@ -12,7 +12,7 @@ const productSchema = new Schema({
   ivaPrice: { type: Number, required: false },
   discount: { type: Number, default: 0, min: 0, max: 100 },
   stock: { type: Number, required: true, min: 0 },
-  categories: [{ type: String, required: true }],
+  categories: [{ type: String, required: true, maxlength: 50 }],
   dimensions: {
     width: { type: Number, required: true, min: 0 },
     height: { type: Number, required: true, min: 0 },
@@ -32,5 +32,10 @@ productSchema.pre('save', function (next) {
   this.ivaPrice = this.price * this.iva;
   next();
 });
+
+// Método personalizado para buscar productos por categoría
+productSchema.statics.findByCategory = function (category) {
+  return this.find({ categories: { $regex: new RegExp(category, 'i') } });
+};
 
 export default model('Product', productSchema);

@@ -157,7 +157,7 @@ export async function deleteProduct(id) {
 
 export async function getProductsByCategory(category) {
   try {
-    const products = await Product.find({ category: { $regex: new RegExp(category, 'i') } });
+    const products = await Product.findByCategory(category);
     return products;
   } catch (error) {
     throw new Error('Error al obtener los productos por categoría: ' + error.message);
