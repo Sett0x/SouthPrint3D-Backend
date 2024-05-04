@@ -12,8 +12,8 @@ import {
 
 const router = express.Router();
 
-router.get('/hidden', isAdmin, getHiddenProducts); // Changed the order here
 router.get('', getProducts);
+router.get('/hidden', isAdmin, getHiddenProducts); // Changed the order here
 router.post('', isAdmin, createProduct);
 router.patch('/:id', isAdmin, updateProduct);
 router.delete('/:id', isAdmin, deleteProduct);
