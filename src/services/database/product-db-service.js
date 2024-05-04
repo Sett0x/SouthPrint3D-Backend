@@ -2,7 +2,7 @@ import Product from '../../models/product.js';
 
 export async function getProducts(queryParams, page = 1, perPage = 10) {
   const { id, name, category, priceMin, priceMax, minStock, search, totalPrice, averageRating, sortField, sortOrder } = queryParams;
-  let query = {};
+  let query = { show: true }; // Agregamos la condición para mostrar solo productos con show=true
 
   if (id) {
     query._id = id;
@@ -52,12 +52,23 @@ export async function getProducts(queryParams, page = 1, perPage = 10) {
 
     const totalCount = await Product.countDocuments(query);
     const totalPages = Math.ceil(totalCount / perPage);
-    const currentPage = Math.min(Math.max(page, 1), totalPages);
+    const currentPage = Math.max(Math.min(page, totalPages), 1); // Ajustar page para asegurar que esté dentro del rango válido
 
     const products = await productsQuery
       .skip((currentPage - 1) * perPage)
       .limit(perPage)
       .exec();
+
+    if (products.length === 0) {
+      return {
+        currentPage,
+        totalPages,
+        totalCount,
+        perPage,
+        products: [],
+        message: "No se encontraron productos."
+      };
+    }
 
     return {
       currentPage,
@@ -68,6 +79,51 @@ export async function getProducts(queryParams, page = 1, perPage = 10) {
     };
   } catch (error) {
     throw new Error(`Error al obtener los productos: ${error.message}`);
+  }
+}
+
+export async function getHiddenProducts(queryParams, page = 1, perPage = 10) {
+  try {
+    const { search } = queryParams;
+
+    let query = { show: false }; // Filtrar por productos ocultos
+
+    if (search) {
+      query.$or = [
+        { name: { $regex: new RegExp(search, 'i') } },
+        { description: { $regex: new RegExp(search, 'i') } },
+        { categories: { $regex: new RegExp(search, 'i') } }
+      ];
+    }
+
+    const totalCount = await Product.countDocuments(query);
+    const totalPages = Math.ceil(totalCount / perPage);
+    const currentPage = Math.max(Math.min(page, totalPages), 1);
+
+    const hiddenProducts = await Product.find(query)
+      .skip((currentPage - 1) * perPage)
+      .limit(perPage);
+
+    if (hiddenProducts.length === 0) {
+      return {
+        currentPage,
+        totalPages,
+        totalCount,
+        perPage,
+        products: [],
+        message: "No se encontraron productos ocultos."
+      };
+    }
+
+    return {
+      currentPage,
+      totalPages,
+      totalCount,
+      perPage,
+      products: hiddenProducts
+    };
+  } catch (error) {
+    throw new Error('Error al obtener los productos ocultos: ' + error.message);
   }
 }
 
