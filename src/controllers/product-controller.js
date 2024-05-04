@@ -22,6 +22,16 @@ export async function getProducts(req, res, next) {
   }
 }
 
+export async function getHiddenProducts(req, res, next) {
+  const { page = 1, perPage = 10, ...queryParams } = req.query;
+  try {
+    const hiddenProducts = await ProductDBService.getHiddenProducts(queryParams, parseInt(page), parseInt(perPage));
+    res.json(hiddenProducts);
+  } catch (error) {
+    next(error);
+  }
+}
+
 export async function getProductById(req, res, next) {
   const { id } = req.params;
   try {

@@ -82,6 +82,51 @@ export async function getProducts(queryParams, page = 1, perPage = 10) {
   }
 }
 
+export async function getHiddenProducts(queryParams, page = 1, perPage = 10) {
+  try {
+    const { search } = queryParams;
+
+    let query = { show: false }; // Filtrar por productos ocultos
+
+    if (search) {
+      query.$or = [
+        { name: { $regex: new RegExp(search, 'i') } },
+        { description: { $regex: new RegExp(search, 'i') } },
+        { categories: { $regex: new RegExp(search, 'i') } }
+      ];
+    }
+
+    const totalCount = await Product.countDocuments(query);
+    const totalPages = Math.ceil(totalCount / perPage);
+    const currentPage = Math.max(Math.min(page, totalPages), 1);
+
+    const hiddenProducts = await Product.find(query)
+      .skip((currentPage - 1) * perPage)
+      .limit(perPage);
+
+    if (hiddenProducts.length === 0) {
+      return {
+        currentPage,
+        totalPages,
+        totalCount,
+        perPage,
+        products: [],
+        message: "No se encontraron productos ocultos."
+      };
+    }
+
+    return {
+      currentPage,
+      totalPages,
+      totalCount,
+      perPage,
+      products: hiddenProducts
+    };
+  } catch (error) {
+    throw new Error('Error al obtener los productos ocultos: ' + error.message);
+  }
+}
+
 export async function createProduct(productData) {
   try {
     const product = await Product.create(productData);
