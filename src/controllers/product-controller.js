@@ -7,7 +7,7 @@ const validationRules = [
   body('description').notEmpty().withMessage('La descripción del producto es requerida'),
   body('price').isFloat({ min: 0 }).withMessage('El precio debe ser un número positivo'),
   body('stock').isInt({ min: 0 }).withMessage('El stock debe ser un número entero positivo'),
-  body('category').notEmpty().withMessage('La categoría del producto es requerida'),
+  body('categories').isArray({ min: 1 }).withMessage('Las categorías del producto son requeridas y deben ser al menos una'),
   // Agregar más reglas de validación según sea necesario
 ];
 

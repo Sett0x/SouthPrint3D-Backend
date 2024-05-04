@@ -2,7 +2,7 @@ import Product from '../../models/product.js';
 
 export async function getProducts(queryParams, page = 1, perPage = 10) {
   const { id, name, category, priceMin, priceMax, minStock, search, totalPrice, averageRating, sortField, sortOrder } = queryParams;
-  let query = {};
+  let query = { show: true }; // Agregamos la condición para mostrar solo productos con show=true
 
   if (id) {
     query._id = id;
@@ -52,12 +52,23 @@ export async function getProducts(queryParams, page = 1, perPage = 10) {
 
     const totalCount = await Product.countDocuments(query);
     const totalPages = Math.ceil(totalCount / perPage);
-    const currentPage = Math.min(Math.max(page, 1), totalPages);
+    const currentPage = Math.max(Math.min(page, totalPages), 1); // Ajustar page para asegurar que esté dentro del rango válido
 
     const products = await productsQuery
       .skip((currentPage - 1) * perPage)
       .limit(perPage)
       .exec();
+
+    if (products.length === 0) {
+      return {
+        currentPage,
+        totalPages,
+        totalCount,
+        perPage,
+        products: [],
+        message: "No se encontraron productos."
+      };
+    }
 
     return {
       currentPage,
