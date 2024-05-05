@@ -139,8 +139,37 @@ export async function createProduct(productData) {
 
 export async function updateProduct(id, productData) {
   try {
-    const product = await Product.findByIdAndUpdate(id, productData, { new: true });
-    return product;
+    // Obtener el producto actual
+    const existingProduct = await Product.findById(id);
+
+    if (!existingProduct) {
+      throw new Error('Producto no encontrado');
+    }
+
+    // Actualizar el producto con los datos proporcionados
+    const updatedProduct = await Product.findByIdAndUpdate(id, productData, { new: true });
+
+    // Verificar si se proporcionó un descuento en los datos actualizados
+    if (productData.discount && productData.discount > 0) {
+      // Calcular los precios y el IVA con el nuevo descuento aplicado
+      const discountAmount = updatedProduct.price * (productData.discount / 100);
+      updatedProduct.priceWithDiscount = updatedProduct.price - discountAmount;
+      updatedProduct.totalPriceWithDiscount = updatedProduct.priceWithDiscount + (updatedProduct.priceWithDiscount * updatedProduct.iva);
+      updatedProduct.ivaPrice = parseFloat((updatedProduct.totalPriceWithDiscount - updatedProduct.priceWithDiscount).toFixed(2));
+      updatedProduct.ivaForTotalPrice = parseFloat((updatedProduct.price * updatedProduct.iva).toFixed(2));
+    } else {
+      // Si no se proporcionó un nuevo descuento, eliminar los campos relacionados con el descuento
+      updatedProduct.discount = 0;
+      updatedProduct.priceWithDiscount = null;
+      updatedProduct.totalPriceWithDiscount = null;
+      updatedProduct.ivaPrice = null;
+      updatedProduct.ivaForTotalPrice = parseFloat((updatedProduct.price * updatedProduct.iva).toFixed(2));
+    }
+
+    // Guardar los cambios realizados
+    await updatedProduct.save();
+
+    return updatedProduct;
   } catch (error) {
     throw new Error('Error al actualizar el producto: ' + error.message);
   }
