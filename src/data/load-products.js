@@ -30,8 +30,8 @@ const getProductsByName = async (productName) => {
       },
     });
 
-    // Verificar si la lista de productos está vacía
-    if (response.data.products.length === 0) {
+    // Verificar si la lista de productos está vacía o si la respuesta es falsa
+    if (!response.data || response.data.products.length === 0) {
       return []; // No se encontraron productos con el nombre proporcionado
     } else {
       return response.data.products; // Se encontraron productos con el nombre proporcionado
@@ -41,7 +41,6 @@ const getProductsByName = async (productName) => {
     return []; // Error al realizar la solicitud
   }
 };
-
 
 // Función para cargar un producto en la API
 const loadProduct = async (product) => {
@@ -57,6 +56,7 @@ const loadProduct = async (product) => {
     console.error('Error al cargar el producto:', product.name, error.response?.data || error.message);
   }
 };
+
 // Leer el archivo JSON y cargar los datos
 const loadData = async () => {
   try {
