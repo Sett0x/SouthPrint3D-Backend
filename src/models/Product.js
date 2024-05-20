@@ -4,7 +4,7 @@ const { Schema, model } = mongoose;
 
 const productSchema = new Schema({
   show: { type: Boolean, default: true },
-  name: { type: String, required: true },
+  name: { type: String, required: true, unique: true },
   description: { type: String, required: true },
   price: { type: Number, required: true, min: 0 },
   iva: { type: Number, default: 0.21, min: 0 },
