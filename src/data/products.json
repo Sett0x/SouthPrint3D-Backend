@@ -1,0 +1,888 @@
+[
+  {
+    "name": "8-bit Custom Lamp",
+    "description": "Lampara customizable queda genial.",
+    "price": 40,
+    "stock": 100,
+    "categories": ["lamp", "decoration", "interior", "custom"],
+    "dimensions": {
+        "width": 25,
+        "height": 12,
+        "depth": 4
+    },
+    "images": [
+        "8-bitCustom_Lamp_1.webp",
+        "8-bitCustom_Lamp_2.webp",
+        "8-bitCustom_Lamp_3.webp",
+        "8-bitCustom_Lamp_4.webp",
+        "8-bitCustom_Lamp_5.webp",
+        "8-bitCustom_Lamp_6.webp",
+        "8-bitCustom_Lamp_7.webp"
+    ]
+  },
+  {
+    "name": "Aztec Club",
+    "description": "Garrote acteca, para cosplay o decoración.",
+    "price": 70,
+    "stock": 75,
+    "categories": ["aztec", "decoration", "cosplay", "sword", "history"],
+    "dimensions": {
+        "width": 25,
+        "height": 100,
+        "depth": 6
+    },
+    "images": [
+        "Aztec_Club_1.webp",
+        "Aztec_Club_2.webp",
+        "Aztec_Club_3.webp",
+        "Aztec_Club_4.webp",
+        "Aztec_Club_5.webp",
+        "Aztec_Club_6.webp",
+        "Aztec_Club_7.webp"
+    ]
+  },
+  {
+    "name": "Calavera Mask",
+    "description": "Mascara de calavera, para cosplay o decoración.",
+    "price": 70,
+    "stock": 50,
+    "categories": ["mask", "decoration", "cosplay"],
+    "dimensions": {
+        "width": 40,
+        "height": 50,
+        "depth": 40
+    },
+    "images": [
+        "Calavera_Mask_1.webp",
+        "Calavera_Mask_2.webp",
+        "Calavera_Mask_3.webp",
+        "Calavera_Mask_4.webp",
+        "Calavera_Mask_5.webp",
+        "Calavera_Mask_6.webp"
+    ]
+  },
+  {
+    "name": "Carnival Mask",
+    "description": "Mascara de carnaval, para cosplay o decoración.",
+    "price": 70,
+    "stock": 50,
+    "categories": ["mask", "decoration", "cosplay"],
+    "dimensions": {
+        "width": 40,
+        "height": 50,
+        "depth": 40
+    },
+    "images": [
+        "Carnival_Mask_1.webp",
+        "Carnival_Mask_2.webp",
+        "Carnival_Mask_3.webp",
+        "Carnival_Mask_4.webp"
+    ]
+  },
+  {
+    "name": "Centurion Bust",
+    "description": "Busto de centurión, con distintas variantes, para decoración.",
+    "price": 40,
+    "stock": 50,
+    "categories": ["bust", "decoration", "history"],
+    "dimensions": {
+        "width": 12,
+        "height": 35,
+        "depth": 12
+    },
+    "images": [
+        "Centurion_Bust_1.webp",
+        "Centurion_Bust_2.webp",
+        "Centurion_Bust_3.webp",
+        "Centurion_Bust_4.webp",
+        "Centurion_Bust_5.webp",
+        "Centurion_Bust_6.webp",
+        "Centurion_Bust_7.webp",
+        "Centurion_Bust_8.webp",
+        "Centurion_Bust_9.webp",
+        "Centurion_Bust_10.webp"
+    ]
+  },
+  {
+    "name": "Cyber Samurai Mask",
+    "description": "Mascara de Cyber Samurai, para cosplay o decoración.",
+    "price": 70,
+    "stock": 50,
+    "categories": ["mask", "decoration", "cosplay", "samurai", "cyber", "japan"],
+    "dimensions": {
+        "width": 40,
+        "height": 50,
+        "depth": 40
+    },
+    "images": [
+        "CyberSamurai_Mask_1.webp",
+        "CyberSamurai_Mask_2.webp",
+        "CyberSamurai_Mask_3.webp",
+        "CyberSamurai_Mask_4.webp",
+        "CyberSamurai_Mask_5.webp"
+    ]
+  },
+  {
+    "name": "Dice Dagger Custom",
+    "description": "Daga para guardar dados de roll customizable, para sorpender en tus partias.",
+    "price": 30,
+    "stock": 50,
+    "categories": ["dagger", "roll", "game", "dice", "custom"],
+    "dimensions": {
+        "width": 14,
+        "height": 30,
+        "depth": 8
+    },
+    "images": [
+        "DiceDagger_Custom_1.webp",
+        "DiceDagger_Custom_2.webp",
+        "DiceDagger_Custom_3.webp",
+        "DiceDagger_Custom_4.webp"
+    ]
+  },
+  {
+    "name": "Dichotomy Bust",
+    "description": "Busto de dicotomía, con distintas variantes, para decoración.",
+    "price": 40,
+    "stock": 50,
+    "categories": ["bust", "decoration", "dichotomy"],
+    "dimensions": {
+        "width": 12,
+        "height": 35,
+        "depth": 12
+    },
+    "images": [
+        "Dichotomy_Bust_1.webp",
+        "Dichotomy_Bust_2.webp",
+        "Dichotomy_Bust_3.webp",
+        "Dichotomy_Bust_4.webp",
+        "Dichotomy_Bust_5.webp",
+        "Dichotomy_Bust_6.webp",
+        "Dichotomy_Bust_7.webp",
+        "Dichotomy_Bust_8.webp",
+        "Dichotomy_Bust_9.webp"
+    ]
+  },
+  {
+    "name": "Dragon Helmet",
+    "description": "Casco dragón, para cosplay o decoración.",
+    "price": 70,
+    "stock": 50,
+    "categories": ["helmet", "decoration", "cosplay", "dragon"],
+    "dimensions": {
+        "width": 40,
+        "height": 50,
+        "depth": 40
+    },
+    "images": [
+        "dragon_helmet_1.webp",
+        "dragon_helmet_2.webp",
+        "dragon_helmet_3.webp",
+        "dragon_helmet_4.webp",
+        "dragon_helmet_5.webp"
+    ]
+  },
+  {
+    "name": "Dwarven Helmet",
+    "description": "Casco enano, para cosplay o decoración.",
+    "price": 70,
+    "stock": 50,
+    "categories": ["helmet", "decoration", "cosplay", "dwarf", "fantasy"],
+    "dimensions": {
+        "width": 40,
+        "height": 50,
+        "depth": 40
+    },
+    "images": [
+        "Dwarven_Helmet_1.webp",
+        "Dwarven_Helmet_2.webp",
+        "Dwarven_Helmet_3.webp",
+        "Dwarven_Helmet_4.webp"
+    ]
+  },
+  {
+    "name": "Dwarven Sword",
+    "description": "Espada enana, para cosplay o decoración.",
+    "price": 70,
+    "stock": 75,
+    "categories": ["dwarf", "decoration", "cosplay", "sword", "fantasy"],
+    "dimensions": {
+        "width": 25,
+        "height": 100,
+        "depth": 6
+    },
+    "images": [
+        "Dwarven_Sword_1.webp",
+        "Dwarven_Sword_2.webp",
+        "Dwarven_Sword_3.webp",
+        "Dwarven_Sword_4.webp",
+        "Dwarven_Sword_5.webp",
+        "Dwarven_Sword_6.webp",
+        "Dwarven_Sword_7.webp"
+    ]
+  },
+  {
+    "name": "Elven Sword",
+    "description": "Espada elfica, para cosplay o decoración.",
+    "price": 70,
+    "stock": 75,
+    "categories": ["elf", "decoration", "cosplay", "sword", "fantasy"],
+    "dimensions": {
+        "width": 25,
+        "height": 100,
+        "depth": 6
+    },
+    "images": [
+        "Elven_Sword_1.webp",
+        "Elven_Sword_2.webp",
+        "Elven_Sword_3.webp",
+        "Elven_Sword_4.webp"
+    ]
+  },
+  {
+    "name": "Et tu Brute Incense Holder",
+    "description": "Quemador de incienso, decoración.",
+    "price": 40,
+    "stock": 75,
+    "categories": ["incense holder", "incense burner", "decoration", "interior", "history", "roma", "spqr"],
+    "dimensions": {
+        "width": 25,
+        "height": 10,
+        "depth": 8
+    },
+    "images": [
+        "EtTuBrute_IncenseHolder_1.webp",
+        "EtTuBrute_IncenseHolder_2.webp",
+        "EtTuBrute_IncenseHolder_3.webp",
+        "EtTuBrute_IncenseHolder_4.webp",
+        "EtTuBrute_IncenseHolder_5.webp",
+        "EtTuBrute_IncenseHolder_6.webp",
+        "EtTuBrute_IncenseHolder_7.webp",
+        "EtTuBrute_IncenseHolder_8.webp",
+        "EtTuBrute_IncenseHolder_9.webp"
+    ]
+  },
+  {
+    "name": "Evil Clown Mask",
+    "description": "Mascara de payaso, para cosplay o decoración.",
+    "price": 70,
+    "stock": 50,
+    "categories": ["mask", "decoration", "cosplay"],
+    "dimensions": {
+        "width": 40,
+        "height": 50,
+        "depth": 40
+    },
+    "images": [
+        "EvilClown_Mask_1.webp",
+        "EvilClown_Mask_2.webp",
+        "EvilClown_Mask_3.webp",
+        "EvilClown_Mask_4.webp",
+        "EvilClown_Mask_5.webp"
+    ]
+  },
+  {
+    "name": "Galea Helmet",
+    "description": "Casco galea, para cosplay o decoración.",
+    "price": 70,
+    "stock": 50,
+    "categories": ["helmet", "decoration", "cosplay", "history", "roma", "spqr"],
+    "dimensions": {
+        "width": 40,
+        "height": 50,
+        "depth": 40
+    },
+    "images": [
+        "Galea_Helmet_1.webp",
+        "Galea_Helmet_2.webp",
+        "Galea_Helmet_3.webp",
+        "Galea_Helmet_4.webp",
+        "Galea_Helmet_5.webp",
+        "Galea_Helmet_6.webp"
+    ]
+  },
+  {
+    "name": "Geared Heart Gift Box",
+    "description": "Caja con engranajes en forma de corazón, genial para entregar regalos en fechas importantes.",
+    "price": 40,
+    "stock": 50,
+    "categories": ["heart", "geared", "love", "box", "gadget", "valentine", "present", "gift"],
+    "dimensions": {
+        "width": 15,
+        "height": 25,
+        "depth": 10
+    },
+    "images": [
+        "GearedHeart_GiftBox_1.webp",
+        "GearedHeart_GiftBox_2.webp",
+        "GearedHeart_GiftBox_3.webp",
+        "GearedHeart_GiftBox_4.webp",
+        "GearedHeart_GiftBox_5.webp",
+        "GearedHeart_GiftBox_6.webp",
+        "GearedHeart_GiftBox_7.webp",
+        "GearedHeart_GiftBox_8.webp"
+    ]
+  },
+  {
+    "name": "Haz Mat Suit Airpod Case Holder",
+    "description": "Muñeco con traje de protección de peligro químico, con mochila para guardar tus airpods.",
+    "price": 40,
+    "stock": 50,
+    "categories": ["airpods", "case", "apple", "iphone", "bust", "decoration", "custom"],
+    "dimensions": {
+        "width": 10,
+        "height": 25,
+        "depth": 10
+    },
+    "images": [
+        "HazMatSuit_AirpodCaseHolder_1.webp",
+        "HazMatSuit_AirpodCaseHolder_2.webp",
+        "HazMatSuit_AirpodCaseHolder_3.webp",
+        "HazMatSuit_AirpodCaseHolder_4.webp",
+        "HazMatSuit_AirpodCaseHolder_5.webp",
+        "HazMatSuit_AirpodCaseHolder_6.webp",
+        "HazMatSuit_AirpodCaseHolder_7.webp",
+        "HazMatSuit_AirpodCaseHolder_8.webp",
+        "HazMatSuit_AirpodCaseHolder_9.webp",
+        "HazMatSuit_AirpodCaseHolder_10.webp",
+        "HazMatSuit_AirpodCaseHolder_11.webp"
+    ]
+  },
+  {
+    "name": "Horned Helmet",
+    "description": "Casco con cuernos, muy vikingo, para cosplay o decoración.",
+    "price": 70,
+    "stock": 50,
+    "categories": ["helmet", "decoration", "cosplay", "horn", "horned", "viking"],
+    "dimensions": {
+        "width": 40,
+        "height": 50,
+        "depth": 40
+    },
+    "images": [
+        "Horned_Helmet_1.webp",
+        "Horned_Helmet_2.webp",
+        "Horned_Helmet_3.webp",
+        "Horned_Helmet_4.webp",
+        "Horned_Helmet_5.webp"
+    ]
+  },
+  {
+    "name": "Jian Warrior Bust",
+    "description": "Busto de guerrero Jian, muy mongol, con distintas variantes, para decoración.",
+    "price": 40,
+    "stock": 50,
+    "categories": ["bust", "decoration", "history", "warrior", "mongol"],
+    "dimensions": {
+        "width": 12,
+        "height": 35,
+        "depth": 12
+    },
+    "images": [
+        "JianWarrior_Bust_1.webp",
+        "JianWarrior_Bust_2.webp",
+        "JianWarrior_Bust_3.webp",
+        "JianWarrior_Bust_4.webp",
+        "JianWarrior_Bust_5.webp",
+        "JianWarrior_Bust_6.webp",
+        "JianWarrior_Bust_7.webp",
+        "JianWarrior_Bust_8.webp"
+    ]
+  },
+  {
+    "name": "Katana Sword",
+    "description": "Katana, muy samurai, para cosplay o decoración.",
+    "price": 70,
+    "stock": 75,
+    "categories": ["japan", "decoration", "cosplay", "sword", "katana", "samurai", "history"],
+    "dimensions": {
+        "width": 25,
+        "height": 100,
+        "depth": 6
+    },
+    "images": [
+        "Katana_Sword_1.webp",
+        "Katana_Sword_2.webp",
+        "Katana_Sword_3.webp",
+        "Katana_Sword_4.webp",
+        "Katana_Sword_5.webp",
+        "Katana_Sword_6.webp"
+    ]
+  },
+  {
+    "name": "Kitsune Mask",
+    "description": "Mascara Kitsune, para cosplay o decoración.",
+    "price": 70,
+    "stock": 50,
+    "categories": ["mask", "decoration", "cosplay", "japan"],
+    "dimensions": {
+        "width": 40,
+        "height": 50,
+        "depth": 40
+    },
+    "images": [
+        "Kitsune_Mask_1.webp",
+        "Kitsune_Mask_2.webp",
+        "Kitsune_Mask_3.webp",
+        "Kitsune_Mask_4.webp"
+    ]
+  },
+  {
+    "name": "Knight Helmet",
+    "description": "Casco de caballero, muy medievo, para cosplay o decoración.",
+    "price": 70,
+    "stock": 50,
+    "categories": ["helmet", "decoration", "cosplay", "history", "medieval", "knight"],
+    "dimensions": {
+        "width": 40,
+        "height": 50,
+        "depth": 40
+    },
+    "images": [
+        "Knight_Helmet_1.webp",
+        "Knight_Helmet_2.webp",
+        "Knight_Helmet_3.webp",
+        "Knight_Helmet_4.webp",
+        "Knight_Helmet_5.webp"
+    ]
+  },
+  {
+    "name": "Lions Courage Fountaion Backflow Burner",
+    "description": "Quemador de incienso, decoración.",
+    "price": 40,
+    "stock": 75,
+    "categories": ["incense holder", "incense burner", "decoration", "interior", "fountain"],
+    "dimensions": {
+        "width": 8,
+        "height": 25,
+        "depth": 5
+    },
+    "images": [
+        "LionsCourageFountain_BackflowBurner_1.webp",
+        "LionsCourageFountain_BackflowBurner_2.webp",
+        "LionsCourageFountain_BackflowBurner_3.webp",
+        "LionsCourageFountain_BackflowBurner_4.webp",
+        "LionsCourageFountain_BackflowBurner_5.webp",
+        "LionsCourageFountain_BackflowBurner_6.webp",
+        "LionsCourageFountain_BackflowBurner_7.webp",
+        "LionsCourageFountain_BackflowBurner_8.webp",
+        "LionsCourageFountain_BackflowBurner_9.webp",
+        "LionsCourageFountain_BackflowBurner_10.webp"
+    ]
+  },
+  {
+    "name": "Long Sword",
+    "description": "Espada larga, para cosplay o decoración.",
+    "price": 70,
+    "stock": 75,
+    "categories": ["long", "decoration", "cosplay", "sword", "fantasy", "medieval"],
+    "dimensions": {
+        "width": 25,
+        "height": 100,
+        "depth": 6
+    },
+    "images": [
+        "Long_Sword_1.webp",
+        "Long_Sword_2.webp",
+        "Long_Sword_3.webp",
+        "Long_Sword_4.webp",
+        "Long_Sword_5.webp"
+    ]
+  },
+  {
+    "name": "Metropolis Mask",
+    "description": "Mascara metropolis, para cosplay o decoración.",
+    "price": 70,
+    "stock": 50,
+    "categories": ["mask", "decoration", "cosplay"],
+    "dimensions": {
+        "width": 40,
+        "height": 50,
+        "depth": 40
+    },
+    "images": [
+        "Metropolis_Mask_1.webp",
+        "Metropolis_Mask_2.webp",
+        "Metropolis_Mask_3.webp",
+        "Metropolis_Mask_4.webp",
+        "Metropolis_Mask_5.webp"
+    ]
+  },
+  {
+    "name": "Octopus Wine Holder",
+    "description": "Pulpo para sujetar botella, para decoración.",
+    "price": 70,
+    "stock": 50,
+    "categories": ["gadget", "decoration", "octopus", "holder", "bottle", "kitchen"],
+    "dimensions": {
+        "width": 30,
+        "height": 60,
+        "depth": 30
+    },
+    "images": [
+        "Octopus_WineHolder_1.webp",
+        "Octopus_WineHolder_2.webp",
+        "Octopus_WineHolder_3.webp",
+        "Octopus_WineHolder_4.webp",
+        "Octopus_WineHolder_5.webp",
+        "Octopus_WineHolder_6.webp"
+    ]
+  },
+  {
+    "name": "Oni Mask",
+    "description": "Mascara Oni, para cosplay o decoración.",
+    "price": 70,
+    "stock": 50,
+    "categories": ["mask", "decoration", "cosplay", "samurai", "japan", "history"],
+    "dimensions": {
+        "width": 40,
+        "height": 60,
+        "depth": 40
+    },
+    "images": [
+        "Oni_Mask_1.webp",
+        "Oni_Mask_2.webp",
+        "Oni_Mask_3.webp",
+        "Oni_Mask_4.webp"
+    ]
+  },
+  {
+    "name": "Potion Inventory",
+    "description": "Inventario de pociones, para cosplay o decoración.",
+    "price": 30,
+    "stock": 50,
+    "categories": ["potion", "roll", "game", "inventory", "custom", "cosplay", "decoration"],
+    "dimensions": {
+        "width": 4,
+        "height": 15,
+        "depth": 4
+    },
+    "images": [
+        "Potion_Inventory_1.webp",
+        "Potion_Inventory_2.webp",
+        "Potion_Inventory_3.webp",
+        "Potion_Inventory_4.webp"
+    ]
+  },
+  {
+    "name": "Primal Mask",
+    "description": "Mascara primitiva, para cosplay o decoración.",
+    "price": 70,
+    "stock": 50,
+    "categories": ["mask", "decoration", "cosplay"],
+    "dimensions": {
+        "width": 40,
+        "height": 50,
+        "depth": 40
+    },
+    "images": [
+        "Primal_Mask_1.webp",
+        "Primal_Mask_2.webp",
+        "Primal_Mask_3.webp",
+        "Primal_Mask_4.webp",
+        "Primal_Mask_5.webp"
+    ]
+  },
+  {
+    "name": "Samurai Helmet",
+    "description": "Casco Samurai, para cosplay o decoración.",
+    "price": 70,
+    "stock": 50,
+    "categories": ["helmet", "decoration", "cosplay", "samurai", "japan", "history"],
+    "dimensions": {
+        "width": 40,
+        "height": 50,
+        "depth": 40
+    },
+    "images": [
+        "Samurai_Helmet_1.webp",
+        "Samurai_Helmet_2.webp",
+        "Samurai_Helmet_3.webp",
+        "Samurai_Helmet_4.webp"
+    ]
+  },
+  {
+    "name": "Siege Weapon Trebuchet",
+    "description": "Arma de asedio, trebuchet o fundíbulo, representación fiel, funcional, para decoración.",
+    "price": 50,
+    "stock": 50,
+    "categories": ["siege", "geared", "weapon", "trebuchet", "gadget", "fundibulo", "decoration", "medieval", "history"],
+    "dimensions": {
+        "width": 25,
+        "height": 35,
+        "depth": 15
+    },
+    "images": [
+        "SiegeWeapon_Trebuchet_1.webp",
+        "SiegeWeapon_Trebuchet_2.webp",
+        "SiegeWeapon_Trebuchet_3.webp",
+        "SiegeWeapon_Trebuchet_4.webp",
+        "SiegeWeapon_Trebuchet_5.webp",
+        "SiegeWeapon_Trebuchet_6.webp",
+        "SiegeWeapon_Trebuchet_7.webp"
+    ]
+  },
+  {
+    "name": "Spartan Helmet",
+    "description": "Casco espartano, para cosplay o decoración.",
+    "price": 70,
+    "stock": 50,
+    "categories": ["helmet", "decoration", "cosplay", "history", "spartan"],
+    "dimensions": {
+        "width": 40,
+        "height": 50,
+        "depth": 40
+    },
+    "images": [
+        "Spartan_Helmet_1.webp",
+        "Spartan_Helmet_2.webp",
+        "Spartan_Helmet_3.webp"
+    ]
+  },
+  {
+    "name": "Steampunk Claw",
+    "description": "Garras steampunk, para cosplay o decoración.",
+    "price": 20,
+    "stock": 50,
+    "categories": ["claw", "decoration", "cosplay", "steampunk", "hand"],
+    "dimensions": {
+        "width": 5,
+        "height": 8,
+        "depth": 5
+    },
+    "images": [
+        "Steampunk_Claws_1.webp",
+        "Steampunk_Claws_2.webp",
+        "Steampunk_Claws_3.webp",
+        "Steampunk_Claws_4.webp",
+        "Steampunk_Claws_5.webp",
+        "Steampunk_Claws_6.webp"
+    ]
+  },
+  {
+    "name": "Steampunk Mask",
+    "description": "Mascara steampunk, para cosplay o decoración.",
+    "price": 70,
+    "stock": 50,
+    "categories": ["mask", "decoration", "cosplay", "steampunk"],
+    "dimensions": {
+        "width": 40,
+        "height": 50,
+        "depth": 40
+    },
+    "images": [
+        "Steampunk_Mask_1.webp",
+        "Steampunk_Mask_2.webp",
+        "Steampunk_Mask_3.webp",
+        "Steampunk_Mask_4.webp",
+        "Steampunk_Mask_5.webp"
+    ]
+  },
+  {
+    "name": "Steampunk Mug",
+    "description": "Taza steampunk, puedes poner tu bebida favorita dentro, para cosplay o decoración.",
+    "price": 70,
+    "stock": 50,
+    "categories": ["mug", "decoration", "cosplay", "steampunk", "gadget", "kitchen"],
+    "dimensions": {
+        "width": 5,
+        "height": 10,
+        "depth": 5
+    },
+    "images": [
+        "Steampunk_Mug_1.webp",
+        "Steampunk_Mug_2.webp",
+        "Steampunk_Mug_3.webp",
+        "Steampunk_Mug_4.webp"
+    ]
+  },
+  {
+    "name": "Steampunk Topper Hat",
+    "description": "Sobrero de copa steampunk, para cosplay o decoración.",
+    "price": 70,
+    "stock": 50,
+    "categories": ["hat", "decoration", "cosplay", "steampunk"],
+    "dimensions": {
+        "width": 40,
+        "height": 50,
+        "depth": 40
+    },
+    "images": [
+        "SteampunkTopper_Hat_1.webp",
+        "SteampunkTopper_Hat_2.webp",
+        "SteampunkTopper_Hat_3.webp",
+        "SteampunkTopper_Hat_4.webp",
+        "SteampunkTopper_Hat_5.webp"
+    ]
+  },
+  {
+    "name": "The Katana",
+    "description": "Katana, muy cyber samurai, con distintos colores en la hoja, para cosplay o decoración.",
+    "price": 70,
+    "stock": 75,
+    "categories": ["japan", "decoration", "cosplay", "sword", "katana", "samurai", "cyber"],
+    "dimensions": {
+        "width": 25,
+        "height": 100,
+        "depth": 6
+    },
+    "images": [
+        "The_Katana_1.webp",
+        "The_Katana_2.webp",
+        "The_Katana_3.webp",
+        "The_Katana_4.webp"
+    ]
+  },
+  {
+    "name": "The Phantom Backflow Burner",
+    "description": "Quemador de incienso, decoración.",
+    "price": 40,
+    "stock": 75,
+    "categories": ["incense holder", "incense burner", "decoration", "interior", "fountain"],
+    "dimensions": {
+        "width": 10,
+        "height": 25,
+        "depth": 10
+    },
+    "images": [
+        "ThePhantom_BackflowBurner_1.webp",
+        "ThePhantom_BackflowBurner_2.webp",
+        "ThePhantom_BackflowBurner_3.webp",
+        "ThePhantom_BackflowBurner_4.webp",
+        "ThePhantom_BackflowBurner_5.webp",
+        "ThePhantom_BackflowBurner_6.webp",
+        "ThePhantom_BackflowBurner_7.webp",
+        "ThePhantom_BackflowBurner_8.webp",
+        "ThePhantom_BackflowBurner_9.webp"
+    ]
+  },
+  {
+    "name": "The Whisperer Dagger",
+    "description": "La daga susurradora, para cosplay o decoración.",
+    "price": 30,
+    "stock": 50,
+    "categories": ["dagger", "whisperer", "decoration", "cosplay"],
+    "dimensions": {
+        "width": 14,
+        "height": 30,
+        "depth": 8
+    },
+    "images": [
+        "TheWhisperer_Dagger_1.webp",
+        "TheWhisperer_Dagger_2.webp",
+        "TheWhisperer_Dagger_3.webp",
+        "TheWhisperer_Dagger_4.webp",
+        "TheWhisperer_Dagger_5.webp",
+        "TheWhisperer_Dagger_6.webp",
+        "TheWhisperer_Dagger_7.webp"
+    ]
+  },
+  {
+    "name": "Twisted Rose",
+    "description": "Rosa retorcida, genial para entregar regalos en fechas importantes.",
+    "price": 40,
+    "stock": 50,
+    "categories": ["rose", "twisted", "love", "gadget", "valentine", "present", "gift"],
+    "dimensions": {
+        "width": 4,
+        "height": 15,
+        "depth": 4
+    },
+    "images": [
+        "Twisted_Rose_1.webp",
+        "Twisted_Rose_2.webp",
+        "Twisted_Rose_3.webp",
+        "Twisted_Rose_4.webp",
+        "Twisted_Rose_5.webp",
+        "Twisted_Rose_6.webp"
+    ]
+  },
+  {
+    "name": "Viking Battle Axe",
+    "description": "Hacha de batalla vikinga, para cosplay o decoración.",
+    "price": 80,
+    "stock": 75,
+    "categories": ["viking", "decoration", "cosplay", "axe", "fantasy", "history"],
+    "dimensions": {
+        "width": 40,
+        "height": 100,
+        "depth": 8
+    },
+    "images": [
+        "Viking_BattleAxe_1.webp",
+        "Viking_BattleAxe_2.webp",
+        "Viking_BattleAxe_3.webp",
+        "Viking_BattleAxe_4.webp",
+        "Viking_BattleAxe_5.webp",
+        "Viking_BattleAxe_6.webp",
+        "Viking_BattleAxe_7.webp"
+    ]
+  },
+  {
+    "name": "Vine Crown",
+    "description": "Corona enredadera, para cosplay o decoración.",
+    "price": 40,
+    "stock": 50,
+    "categories": ["crown", "decoration", "cosplay", "fantasy"],
+    "dimensions": {
+        "width": 40,
+        "height": 10,
+        "depth": 40
+    },
+    "images": [
+        "Vine_Crown_1.webp",
+        "Vine_Crown_2.webp",
+        "Vine_Crown_3.webp",
+        "Vine_Crown_4.webp",
+        "Vine_Crown_5.webp",
+        "Vine_Crown_6.webp"
+    ]
+  },
+  {
+    "name": "War Cry Incense Holder",
+    "description": "Quemador de incienso, decoración.",
+    "price": 40,
+    "stock": 75,
+    "categories": ["incense holder", "incense burner", "decoration", "interior", "history", "roma", "spqr"],
+    "dimensions": {
+        "width": 25,
+        "height": 10,
+        "depth": 8
+    },
+    "images": [
+        "WarCry_IncenseHolder_1.webp",
+        "WarCry_IncenseHolder_2.webp",
+        "WarCry_IncenseHolder_3.webp",
+        "WarCry_IncenseHolder_4.webp",
+        "WarCry_IncenseHolder_5.webp",
+        "WarCry_IncenseHolder_6.webp",
+        "WarCry_IncenseHolder_7.webp",
+        "WarCry_IncenseHolder_8.webp",
+        "WarCry_IncenseHolder_9.webp",
+        "WarCry_IncenseHolder_10.webp"
+    ]
+  },
+  {
+    "name": "Wielders Wand Custom",
+    "description": "Varitas customizable, para cosplay o descoración.",
+    "price": 30,
+    "stock": 50,
+    "categories": ["wand", "mage", "fantasy", "custom"],
+    "dimensions": {
+        "width": 1,
+        "height": 30,
+        "depth": 1
+    },
+    "images": [
+        "Wielders_Wand_1.webp",
+        "Wielders_Wand_2.webp",
+        "Wielders_Wand_3.webp",
+        "Wielders_Wand_4.webp",
+        "Wielders_Wand_5.webp",
+        "Wielders_Wand_6.webp",
+        "Wielders_Wand_7.webp",
+        "Wielders_Wand_8.webp",
+        "Wielders_Wand_9.webp"
+    ]
+  }
+]
