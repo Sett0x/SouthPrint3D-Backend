@@ -13,7 +13,8 @@ export async function getProducts(queryParams, page = 1, perPage = 10) {
   }
 
   if (category) {
-    query.categories = { $regex: new RegExp(category, 'i') };
+    const categoriesArray = Array.isArray(category) ? category : [category];
+    query.categories = { $all: categoriesArray };
   }
 
   if (priceMin || priceMax) {
