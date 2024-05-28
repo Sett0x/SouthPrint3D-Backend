@@ -1,6 +1,6 @@
 // user-db-service.js
 import bcrypt from 'bcrypt';
-import User from '../../models/user.js';
+import User from '../../models/User.js';
 
 export async function getUsers(queryParams, page = 1, perPage = 10) {
   const { username, email, phone, state, province, city, zipcode, role, sortField, sortOrder } = queryParams;

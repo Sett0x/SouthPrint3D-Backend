@@ -1,7 +1,7 @@
 import { HttpStatusError } from "common-errors";
 import jwt from "jsonwebtoken";
 import logger from "../utils/logger.js";
-import User from '../models/user.js';
+import User from '../models/User.js';
 import config from "../config.js";
 import { errorMiddleware } from '../middlewares/error-middleware.js';
 

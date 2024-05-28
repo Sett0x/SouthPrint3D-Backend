@@ -3,7 +3,7 @@ import { HttpStatusError } from 'common-errors';
 import jwt from 'jsonwebtoken';
 
 import config from '../config.js';
-import User from '../models/user.js'; // Importa el modelo de usuario
+import User from '../models/User.js'
 
 export async function login(req, res, next) {
   const { usernameOrEmail, password } = req.body;
