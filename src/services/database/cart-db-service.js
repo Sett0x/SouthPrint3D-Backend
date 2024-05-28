@@ -1,5 +1,5 @@
-import Cart from '../../models/cart.js';
-import Product from '../../models/product.js';
+import Cart from '../../models/Cart.js';
+import Product from '../../models/Product.js';
 import mongoose from 'mongoose';
 
 export async function addToCart(userId, productId, quantity) {

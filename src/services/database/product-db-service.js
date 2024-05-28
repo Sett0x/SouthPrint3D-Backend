@@ -1,4 +1,4 @@
-import Product from '../../models/product.js';
+import Product from '../../models/Product.js';
 
 export async function getProducts(queryParams, page = 1, perPage = 10) {
   const { id, name, category, priceMin, priceMax, minStock, search, totalPrice, averageRating, sortField, sortOrder } = queryParams;

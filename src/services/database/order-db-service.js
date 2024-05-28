@@ -1,4 +1,4 @@
-import Order from '../../models/order.js';
+import Order from '../../models/Order.js';
 
 export async function getUserOrders(userId, filters, page = 1, perPage = 10) {
   const skip = (page - 1) * perPage;
