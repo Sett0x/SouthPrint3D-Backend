@@ -1,4 +1,4 @@
-import Review from '../../models/review.js';
+import Review from '../../models/Review.js';
 import logger from '../../utils/logger.js';
 import { ValidationError } from 'common-errors';
 import { body, validationResult } from 'express-validator';
