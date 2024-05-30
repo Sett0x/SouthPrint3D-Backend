@@ -9,12 +9,10 @@ const config = {
   app: {
     secretKey: process.env.APP_SECRET_KEY
   },
-
   mongodb: {
     url: process.env.MONGODB_URL,
   },
+  deployUrl: process.env.DEPLOY_URL
 };
 
 export default config;
-
-
