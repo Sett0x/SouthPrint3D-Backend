@@ -23,5 +23,5 @@ cron.schedule('*/14 * * * *', async () => {
 app.listen(port, () => {
   console.log(`Servidor escuchando en el puerto ${port}`);
   console.log(`Cron job peticion a ${deployUrl}`)
-  console.log('Cron job programado para hacer ping al servidor cada 15 minutos.');
+  console.log('Cron job programado para hacer ping al servidor cada 14 minutos.');
 });
