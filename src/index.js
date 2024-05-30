@@ -13,7 +13,7 @@ app.get('/ping', (req, res) => {
 cron.schedule('*/14 * * * *', async () => {
   try {
     const response = await axios.get(`${deployUrl}/ping`);
-    console.log(`Ping exitoso: ${response.data}`);
+    console.log(`Ping exitoso a ${deployUrl}: ${response.data}`);
   } catch (error) {
     console.error(`Error al hacer ping: ${error.message}`);
   }
@@ -22,5 +22,6 @@ cron.schedule('*/14 * * * *', async () => {
 // Iniciar el servidor
 app.listen(port, () => {
   console.log(`Servidor escuchando en el puerto ${port}`);
-  console.log('Cron job programado para hacer ping al servidor cada 5 segundos.');
+  console.log(`Cron job peticion a ${deployUrl}`)
+  console.log('Cron job programado para hacer ping al servidor cada 15 minutos.');
 });
