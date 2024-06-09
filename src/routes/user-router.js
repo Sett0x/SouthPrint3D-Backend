@@ -1,5 +1,6 @@
 import express from 'express';
 import {
+  getUserMe,
   getUsers,
   getUserById,
   updateUser,
@@ -9,14 +10,15 @@ import {
 import { checkToken, isAdmin } from '../middlewares/auth-middleware.js';
 
 const router = express.Router();
-// router.use(checkToken); // REFACT
 
+// Ruta para obtener el perfil del usuario actual
+router.get('/me', checkToken, getUserMe);
+
+// Rutas para obtener y modificar los usuarios
 router.get('', checkToken, isAdmin, getUsers);
-
-// Rutas para acceder y modificar el propio perfil del usuario
 router.get('/:id', checkToken, getUserById);
-router.patch('/:id', checkToken, updateUser); // Los usuarios pueden modificar su propio perfil
-router.delete('/:id', checkToken, deleteUser); // Los usuarios pueden eliminar su propia cuenta
+router.patch('/:id', checkToken, updateUser);
+router.delete('/:id', checkToken, deleteUser);
 router.post('/register', createUser);
 
 export default router;
