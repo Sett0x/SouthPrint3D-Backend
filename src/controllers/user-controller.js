@@ -29,13 +29,16 @@ export async function getUsers(req, res) {
   }
 }
 
-export async function getUserById(req, res) {
+export async function getUserById(req, res, next) {
   const { id } = req.params;
   try {
     const user = await UserService.getUserById(id);
+    if (!user) {
+      throw new ValidationError('Usuario no encontrado');
+    }
     res.json(user);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    next(error);
   }
 }
 
