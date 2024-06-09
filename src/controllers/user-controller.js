@@ -42,6 +42,17 @@ export async function getUserById(req, res, next) {
   }
 }
 
+export async function getUserMe(req, res, next) {
+  try {
+    const userId = req.user.id;
+    const user = await UserService.getUserById(userId);
+    res.json(user);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+}
+
+
 export async function updateUser(req, res) {
   const { id } = req.params;
   const userData = req.body;
