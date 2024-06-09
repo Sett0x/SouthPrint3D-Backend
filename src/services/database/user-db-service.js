@@ -170,3 +170,15 @@ function buildQuery(filters) {
 
   return query;
 }
+
+export async function getUserById(id) {
+  try {
+    const user = await User.findById(id);
+    if (!user) {
+      throw new Error('El usuario no existe');
+    }
+    return user;
+  } catch (error) {
+    throw new Error(`Error al obtener el usuario por ID: ${error.message}`);
+  }
+}
