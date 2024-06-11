@@ -10,7 +10,7 @@ const userSchema = new Schema({
     lastname: { type: String, required: true }
   },
   email: { type: String, required: true, unique: true, trim: true, lowercase: true }, // Correo electrónico normalizado en minúsculas
-  phone : { type: String, required: true, unique: true, minlength: 10, maxlength: 15 }, // Restricciones de longitud para el número de teléfono
+  phone : { type: String, required: true, unique: true, minlength: 9, maxlength: 15 }, // Restricciones de longitud para el número de teléfono
   address: {
     state: { type: String, required: true },
     province: { type: String, required: true },
