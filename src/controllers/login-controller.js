@@ -51,7 +51,7 @@ export async function login(req, res, next) {
 
       // Si las credenciales son válidas, genera un token JWT
       const userInfo = { id: user._id, username: user.username }; // Ajusta la información del usuario según tus necesidades
-      const token = jwt.sign(userInfo, config.app.secretKey, { expiresIn: '24h' }); // Ajusta el tiempo de expiración según tus necesidades
+      const token = jwt.sign(userInfo, config.app.secretKey, { expiresIn: '1h' }); // Ajusta el tiempo de expiración según tus necesidades
 
       // Envía el token JWT en la respuesta al cliente
       res.json({ token });
