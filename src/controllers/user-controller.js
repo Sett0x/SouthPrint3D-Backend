@@ -7,7 +7,7 @@ const validationRules = [
   body('username').notEmpty().withMessage('El nombre de usuario es requerido'),
   body('password').notEmpty().withMessage('La contraseña es requerida').isLength({ min: 6 }).withMessage('La contraseña debe tener al menos 6 caracteres'),
   body('email').isEmail().withMessage('El formato del correo electrónico no es válido'),
-  body('phone').isMobilePhone().withMessage('El formato del número de teléfono no es válido'),
+  body('phone').isNumeric().withMessage('El teléfono debe ser un número').isLength({ min: 9 }).withMessage('El teléfono debe tener al menos 9 dígitos'),
   body('nombre.name').notEmpty().withMessage('El nombre es requerido'),
   body('nombre.lastname').notEmpty().withMessage('El apellido es requerido'),
   body('address.state').notEmpty().withMessage('El estado es requerido'),
