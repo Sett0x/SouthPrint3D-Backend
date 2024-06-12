@@ -174,7 +174,7 @@ function buildQuery(filters) {
 
 export async function getUserById(id) {
   try {
-    const user = await User.findById(id);
+    const user = await User.findById(id).populate('userCart', 'name price images');
     if (!user) {
       throw new Error('El usuario no existe');
     }
@@ -321,7 +321,7 @@ export async function confirmOrder(userId) {
 // Función para obtener el historial de compras de un usuario
 export async function getOrders(userId) {
   try {
-    const purchases = await Order.find({ userId }).select('-__v -updatedAt');
+    const purchases = await Order.find({ userId });//.select('-__v -updatedAt');
     if (!purchases) {
       throw new Error('No se encontraron compras');
     }
