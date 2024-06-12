@@ -7,7 +7,7 @@ import { errorMiddleware } from '../middlewares/error-middleware.js';
 
 // Middleware para verificar si se proporciona un token válido
 export function checkToken(req, res, next) {
-  console.log('[checkToken] Token:', req.headers.authorization)
+  console.log('[checkToken] Token:', req.headers.authorization);
 
   const { authorization } = req.headers;
 

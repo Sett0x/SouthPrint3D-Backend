@@ -5,7 +5,11 @@ import {
   getUserById,
   updateUser,
   deleteUser,
-  createUser
+  createUser,
+  addItemToCart,
+  removeItemFromCart,
+  clearCart,
+  getCart
 } from '../controllers/user-controller.js';
 import { checkToken, isAdmin } from '../middlewares/auth-middleware.js';
 
@@ -13,6 +17,12 @@ const router = express.Router();
 
 // Ruta para obtener el perfil del usuario actual
 router.get('/me', checkToken, getUserMe);
+
+// Rutas para gestionar el carrito de compras
+router.post('/cart/add/:productId', checkToken, addItemToCart); // Cambié la ruta para agregar productos al carrito y pasé el ID del producto en la URL
+router.delete('/cart/remove/:productId', checkToken, removeItemFromCart); // Mantuve esta ruta para eliminar productos del carrito
+router.delete('/cart/clear', checkToken, clearCart);
+router.get('/cart', checkToken, getCart);
 
 // Rutas para obtener y modificar los usuarios
 router.get('', checkToken, isAdmin, getUsers);

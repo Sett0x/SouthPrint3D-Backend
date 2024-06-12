@@ -21,6 +21,7 @@ const userSchema = new Schema({
     floor: { type: String, required: false },
     apartment: { type: String, required: false}
   },
+  userCart: { type: [{ type: Schema.Types.ObjectId, ref: 'Product' }], default: [] },
   role: { type: String, enum: ['admin', 'user'], default: 'user' }
 }, { timestamps: true });
 

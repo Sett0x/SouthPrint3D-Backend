@@ -1,4 +1,3 @@
-// user-controller.js
 import * as UserService from '../services/database/user-db-service.js';
 import { validationResult, body } from 'express-validator';
 
@@ -98,6 +97,55 @@ export async function deleteUser(req, res) {
   try {
     await UserService.deleteUser(id);
     res.status(204).end();
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+}
+
+// Funciones del carrito de compras
+
+export async function addItemToCart(req, res) {
+  const userId = req.user.id;
+  const { productId } = req.params; // Cambié para obtener el ID del producto desde los parámetros de la URL
+
+  try {
+    const user = await UserService.addItemToCart(userId, productId);
+    res.json(user.userCart);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+}
+
+export async function removeItemFromCart(req, res) {
+  const userId = req.user.id;
+  const { productId } = req.params; // Mantuve el uso de los parámetros de la URL para obtener el ID del producto
+
+  try {
+    const user = await UserService.removeItemFromCart(userId, productId);
+    res.json(user.userCart);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+}
+
+
+export async function clearCart(req, res) {
+  const userId = req.user.id;
+
+  try {
+    const user = await UserService.clearCart(userId);
+    res.json(user);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+}
+
+export async function getCart(req, res) {
+  const userId = req.user.id;
+
+  try {
+    const user = await UserService.getCart(userId);
+    res.json(user.userCart);
   } catch (error) {
     res.status(400).json({ message: error.message });
   }

@@ -4,7 +4,7 @@ import productsRouter from './product-router.js';
 import usersRouter from './user-router.js';
 import ordersRouter from './order-router.js';
 import reviewRouter from './review-router.js';
-import cartRouter from './cart-router.js';
+
 import { login } from '../controllers/login-controller.js';
 import { logout } from '../controllers/logout-controller.js';
 
@@ -17,7 +17,7 @@ router.use('/products', productsRouter);
 router.use('/users', usersRouter);
 router.use('/orders', ordersRouter);
 router.use('/reviews', reviewRouter);
-router.use('/cart', cartRouter);
+
 router.use(miscRouter);
 
 export default router;

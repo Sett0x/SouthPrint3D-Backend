@@ -1,6 +1,6 @@
-// user-db-service.js
 import bcrypt from 'bcrypt';
 import User from '../../models/User.js';
+import Product from '../../models/Product.js';
 
 export async function getUsers(queryParams, page = 1, perPage = 10) {
   const { username, email, phone, state, province, city, zipcode, role, sortField, sortOrder } = queryParams;
@@ -180,5 +180,87 @@ export async function getUserById(id) {
     return user;
   } catch (error) {
     throw new Error(`Error al obtener el usuario por ID: ${error.message}`);
+  }
+}
+
+// Funciones del carrito de compras
+
+export async function addItemToCart(userId, productId) {
+  try {
+    const user = await User.findById(userId);
+    if (!user) {
+      throw new Error('Usuario no encontrado');
+    }
+
+    const product = await Product.findById(productId);
+    if (!product) {
+      throw new Error('Producto no encontrado');
+    }
+
+    // Verificar si el producto ya está en el carrito del usuario
+    const productIndex = user.userCart.findIndex(cartItem => cartItem.toString() === productId);
+    if (productIndex === -1) {
+      // Si el producto no está en el carrito, agregarlo
+      user.userCart.push(productId);
+      await user.save();
+      return user;
+    } else {
+      // Si el producto ya está en el carrito, podrías manejarlo según tus requisitos, como lanzar un error o simplemente devolver el usuario
+      throw new Error('El producto ya está en el carrito del usuario');
+    }
+  } catch (error) {
+    throw new Error(`Error al añadir el producto al carrito: ${error.message}`);
+  }
+}
+
+export async function removeItemFromCart(userId, productId) {
+  try {
+    const user = await User.findById(userId);
+    if (!user) {
+      throw new Error('Usuario no encontrado');
+    }
+
+    // Modificado para usar el método indexOf para encontrar la posición del producto en el carrito
+    const productIndex = user.userCart.indexOf(productId);
+    if (productIndex !== -1) {
+      // Si el producto está en el carrito, quitarlo
+      user.userCart.splice(productIndex, 1);
+      await user.save();
+      return user;
+    } else {
+      throw new Error('El producto no está en el carrito del usuario');
+    }
+  } catch (error) {
+    throw new Error(`Error al eliminar el producto del carrito: ${error.message}`);
+  }
+}
+
+
+export async function clearCart(userId) {
+  try {
+    const user = await User.findById(userId);
+    if (!user) {
+      throw new Error('Usuario no encontrado');
+    }
+
+    user.userCart = [];
+    await user.save();
+
+    return user;
+  } catch (error) {
+    throw new Error(`Error al vaciar el carrito: ${error.message}`);
+  }
+}
+
+export async function getCart(userId) {
+  try {
+    const user = await User.findById(userId).populate('userCart');
+    if (!user) {
+      throw new Error('Usuario no encontrado');
+    }
+
+    return user;
+  } catch (error) {
+    throw new Error(`Error al obtener el carrito: ${error.message}`);
   }
 }
