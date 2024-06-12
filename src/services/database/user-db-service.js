@@ -260,42 +260,51 @@ export async function getCart(userId) {
 }
 
 export async function confirmOrder(userId) {
-  const discount = 0.8;
+  let totalPrice = 0;
 
   try {
+
     const user = await User.findById(userId).populate('address').populate('userCart');
 
     if (!user) {
       throw new Error('Usuario no encontrado');
     }
 
+    if (user.userCart.length === 0) {
+      throw new Error('El carrito de compras está vacío');
+    }
+
     const purchase = {
       userId: user._id,
-      shippingAddress: user.address._id, // Utilizar el _id de la dirección del usuario
+      shippingAddress: user.address,
       products: [],
       totalPrice: 0
     };
 
     for (const product of user.userCart) {
+
       const productData = await Product.findById(product._id);
 
-      if (!productData || productData.amount === 0) {
+      if (!productData || productData.stock === 0) {
         throw new Error('El producto no tiene stock');
       }
 
-      productData.amount -= 1;
+      productData.stock -= 1;
 
       const item = {
         productId: productData._id,
         productName: productData.name,
-        price: productData.price * discount
+        price: productData.totalPrice
       };
 
       purchase.products.push(item);
-      purchase.totalPrice = (parseFloat(purchase.totalPrice) + parseFloat(item.price)).toFixed(2);
+
+      totalPrice += parseFloat(item.price);
 
       await productData.save();
     }
+
+    purchase.totalPrice = Number(totalPrice.toFixed(2));
 
     const purchaseDoc = new Order(purchase);
     await purchaseDoc.save();
