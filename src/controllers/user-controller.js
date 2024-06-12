@@ -1,4 +1,3 @@
-// user-controller.js
 import * as UserService from '../services/database/user-db-service.js';
 import { validationResult, body } from 'express-validator';
 
@@ -13,7 +12,7 @@ const validationRules = [
   body('address.state').notEmpty().withMessage('El estado es requerido'),
   body('address.province').notEmpty().withMessage('La provincia es requerida'),
   body('address.city').notEmpty().withMessage('La ciudad es requerida'),
-  body('address.zipcode').notEmpty().withMessage('El código postal es requerido'),
+  body('address.zipcode').notEmpty().withMessage('El código postal es requerido').isLength({min: 5}).withMessage('El código postal debe ser correcto.'),
   body('address.street').notEmpty().withMessage('La calle es requerida'),
   body('address.number').notEmpty().withMessage('El número es requerido').isInt().withMessage('El número debe ser un valor entero'),
 ];
@@ -98,6 +97,97 @@ export async function deleteUser(req, res) {
   try {
     await UserService.deleteUser(id);
     res.status(204).end();
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+}
+
+// Funciones del carrito de compras
+
+export async function addItemToCart(req, res) {
+  const userId = req.user.id;
+  const { productId } = req.params;
+
+  try {
+    const user = await UserService.addItemToCart(userId, productId);
+    const populatedUser = await UserService.getCart(userId); // Usar la función getCart para obtener el carrito completo
+    res.json(populatedUser.userCart);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+}
+
+export async function removeItemFromCart(req, res) {
+  const userId = req.user.id;
+  const { productId } = req.params;
+
+  try {
+    await UserService.removeItemFromCart(userId, productId);
+    const populatedUser = await UserService.getCart(userId); // Usar la función getCart para obtener el carrito completo
+    res.json(populatedUser.userCart);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+}
+
+export async function clearCart(req, res) {
+  const userId = req.user.id;
+
+  try {
+    await UserService.clearCart(userId);
+    const populatedUser = await UserService.getCart(userId); // Usar la función getCart para obtener el carrito completo
+    res.json(populatedUser.userCart);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+}
+
+export async function getCart(req, res) {
+  const userId = req.user.id;
+
+  try {
+    const user = await UserService.getUserById(userId); // Cambiar a getUserById para obtener el carrito poblado
+    const userCart = user.userCart;
+
+    // Calcular la suma total de los precios de los productos en el carrito
+    let totalPrice = 0;
+    for (const product of userCart) {
+      totalPrice += product.totalPrice;
+    }
+
+    // Construir la respuesta JSON que incluye el carrito y la suma total de precios
+    const response = {
+      userCart: userCart,
+      totalPrice: totalPrice.toFixed(2) // Redondear el totalPrice a 2 decimales
+    };
+
+    res.json(response);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+}
+
+
+// Nueva función para confirmar el pedido
+export async function confirmOrder(req, res) {
+  const userId = req.user.id;
+  const { address } = req.body;
+
+  try {
+    const user = await UserService.confirmOrder(userId, address);
+    res.json(user);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+}
+
+// Nueva función para obtener el historial de compras
+export async function getOrders(req, res) {
+  const userId = req.user.id;
+
+  try {
+    const purchases = await UserService.getOrders(userId);
+    res.json(purchases);
   } catch (error) {
     res.status(400).json({ message: error.message });
   }

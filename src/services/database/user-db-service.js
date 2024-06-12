@@ -1,6 +1,7 @@
-// user-db-service.js
 import bcrypt from 'bcrypt';
 import User from '../../models/User.js';
+import Product from '../../models/Product.js';
+import Order from '../../models/Order.js';
 
 export async function getUsers(queryParams, page = 1, perPage = 10) {
   const { username, email, phone, state, province, city, zipcode, role, sortField, sortOrder } = queryParams;
@@ -173,12 +174,172 @@ function buildQuery(filters) {
 
 export async function getUserById(id) {
   try {
-    const user = await User.findById(id);
+    let user = await User.findById(id).populate('userCart', 'name totalPrice images');
+
     if (!user) {
       throw new Error('El usuario no existe');
     }
+
+    user = {
+      ...user.toObject(),
+      userCart: user.userCart.map(product => ({
+        _id: product._id,
+        name: product.name,
+        totalPrice: product.totalPrice,
+        image: product.images.length > 0 ? product.images[0] : null // Tomar solo la primera imagen
+      }))
+    };
+
     return user;
   } catch (error) {
     throw new Error(`Error al obtener el usuario por ID: ${error.message}`);
+  }
+}
+
+
+// Funciones del carrito de compras
+
+export async function addItemToCart(userId, productId) {
+  try {
+    const user = await User.findById(userId);
+    if (!user) {
+      throw new Error('Usuario no encontrado');
+    }
+
+    const product = await Product.findById(productId);
+    if (!product) {
+      throw new Error('Producto no encontrado');
+    }
+
+    const productIndex = user.userCart.findIndex(cartItem => cartItem.toString() === productId);
+    if (productIndex === -1) {
+      user.userCart.push(productId);
+      await user.save();
+      return user;
+    } else {
+      throw new Error('El producto ya está en el carrito del usuario');
+    }
+  } catch (error) {
+    throw new Error(`Error al añadir el producto al carrito: ${error.message}`);
+  }
+}
+
+export async function removeItemFromCart(userId, productId) {
+  try {
+    const user = await User.findById(userId);
+    if (!user) {
+      throw new Error('Usuario no encontrado');
+    }
+
+    const productIndex = user.userCart.indexOf(productId);
+    if (productIndex !== -1) {
+      user.userCart.splice(productIndex, 1);
+      await user.save();
+      return user;
+    } else {
+      throw new Error('El producto no está en el carrito del usuario');
+    }
+  } catch (error) {
+    throw new Error(`Error al eliminar el producto del carrito: ${error.message}`);
+  }
+}
+
+export async function clearCart(userId) {
+  try {
+    const user = await User.findById(userId);
+    if (!user) {
+      throw new Error('Usuario no encontrado');
+    }
+
+    user.userCart = [];
+    await user.save();
+    return user;
+  } catch (error) {
+    throw new Error(`Error al vaciar el carrito: ${error.message}`);
+  }
+}
+
+export async function getCart(userId) {
+  try {
+    const user = await User.findById(userId).populate('userCart');
+    if (!user) {
+      throw new Error('Usuario no encontrado');
+    }
+
+    return user;
+  } catch (error) {
+    throw new Error(`Error al obtener el carrito: ${error.message}`);
+  }
+}
+
+export async function confirmOrder(userId) {
+  let totalPrice = 0;
+
+  try {
+
+    const user = await User.findById(userId).populate('address').populate('userCart');
+
+    if (!user) {
+      throw new Error('Usuario no encontrado');
+    }
+
+    if (user.userCart.length === 0) {
+      throw new Error('El carrito de compras está vacío');
+    }
+
+    const purchase = {
+      userId: user._id,
+      shippingAddress: user.address,
+      products: [],
+      totalPrice: 0
+    };
+
+    for (const product of user.userCart) {
+
+      const productData = await Product.findById(product._id);
+
+      if (!productData || productData.stock === 0) {
+        throw new Error('El producto no tiene stock');
+      }
+
+      productData.stock -= 1;
+
+      const item = {
+        productId: productData._id,
+        productName: productData.name,
+        price: productData.totalPrice
+      };
+
+      purchase.products.push(item);
+
+      totalPrice += parseFloat(item.price);
+
+      await productData.save();
+    }
+
+    purchase.totalPrice = Number(totalPrice.toFixed(2));
+
+    const purchaseDoc = new Order(purchase);
+    await purchaseDoc.save();
+
+    user.userCart = [];
+    await user.save();
+
+    return user;
+  } catch (error) {
+    throw new Error(`Error al confirmar el pedido: ${error.message}`);
+  }
+}
+
+// Función para obtener el historial de compras de un usuario
+export async function getOrders(userId) {
+  try {
+    const purchases = await Order.find({ userId });//.select('-__v -updatedAt');
+    if (!purchases) {
+      throw new Error('No se encontraron compras');
+    }
+    return purchases;
+  } catch (error) {
+    throw new Error(`Error al obtener el historial de compras: ${error.message}`);
   }
 }
