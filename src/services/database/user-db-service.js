@@ -174,10 +174,23 @@ function buildQuery(filters) {
 
 export async function getUserById(id) {
   try {
-    const user = await User.findById(id).populate('userCart', 'name price images');
+    let user = await User.findById(id).populate('userCart', 'name price images');
+
     if (!user) {
       throw new Error('El usuario no existe');
     }
+
+    // Modificar directamente userCart en el objeto user
+    user = {
+      ...user.toObject(), // Convertir a objeto para trabajar con propiedades de Mongoose
+      userCart: user.userCart.map(product => ({
+        _id: product._id,
+        name: product.name,
+        price: product.price,
+        images: product.images.length > 0 ? product.images[0] : null // Tomar solo la primera imagen
+      }))
+    };
+
     return user;
   } catch (error) {
     throw new Error(`Error al obtener el usuario por ID: ${error.message}`);
