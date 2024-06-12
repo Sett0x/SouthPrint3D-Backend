@@ -9,7 +9,9 @@ import {
   addItemToCart,
   removeItemFromCart,
   clearCart,
-  getCart
+  getCart,
+  confirmOrder,
+  getOrders
 } from '../controllers/user-controller.js';
 import { checkToken, isAdmin } from '../middlewares/auth-middleware.js';
 
@@ -23,6 +25,10 @@ router.post('/cart/add/:productId', checkToken, addItemToCart); // Cambié la ru
 router.delete('/cart/remove/:productId', checkToken, removeItemFromCart); // Mantuve esta ruta para eliminar productos del carrito
 router.delete('/cart/clear', checkToken, clearCart);
 router.get('/cart', checkToken, getCart);
+
+// Rutas para confirmar pedido y obtener historial de compras
+router.post('/cart/confirm', checkToken, confirmOrder);
+router.get('/getOrders', checkToken, getOrders);
 
 // Rutas para obtener y modificar los usuarios
 router.get('', checkToken, isAdmin, getUsers);

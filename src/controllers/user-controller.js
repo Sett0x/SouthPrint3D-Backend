@@ -152,3 +152,28 @@ export async function getCart(req, res) {
     res.status(400).json({ message: error.message });
   }
 }
+
+// Nueva función para confirmar el pedido
+export async function confirmOrder(req, res) {
+  const userId = req.user.id;
+  const { address } = req.body;
+
+  try {
+    const user = await UserService.confirmOrder(userId, address);
+    res.json(user);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+}
+
+// Nueva función para obtener el historial de compras
+export async function getOrders(req, res) {
+  const userId = req.user.id;
+
+  try {
+    const purchases = await UserService.getOrders(userId);
+    res.json(purchases);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+}

@@ -1,6 +1,7 @@
 import bcrypt from 'bcrypt';
 import User from '../../models/User.js';
 import Product from '../../models/Product.js';
+import Order from '../../models/Order.js';
 
 export async function getUsers(queryParams, page = 1, perPage = 10) {
   const { username, email, phone, state, province, city, zipcode, role, sortField, sortOrder } = queryParams;
@@ -255,5 +256,68 @@ export async function getCart(userId) {
     return user;
   } catch (error) {
     throw new Error(`Error al obtener el carrito: ${error.message}`);
+  }
+}
+
+export async function confirmOrder(userId) {
+  const discount = 0.8;
+
+  try {
+    const user = await User.findById(userId).populate('address').populate('userCart');
+
+    if (!user) {
+      throw new Error('Usuario no encontrado');
+    }
+
+    const purchase = {
+      userId: user._id,
+      shippingAddress: user.address._id, // Utilizar el _id de la dirección del usuario
+      products: [],
+      totalPrice: 0
+    };
+
+    for (const product of user.userCart) {
+      const productData = await Product.findById(product._id);
+
+      if (!productData || productData.amount === 0) {
+        throw new Error('El producto no tiene stock');
+      }
+
+      productData.amount -= 1;
+
+      const item = {
+        productId: productData._id,
+        productName: productData.name,
+        price: productData.price * discount
+      };
+
+      purchase.products.push(item);
+      purchase.totalPrice = (parseFloat(purchase.totalPrice) + parseFloat(item.price)).toFixed(2);
+
+      await productData.save();
+    }
+
+    const purchaseDoc = new Order(purchase);
+    await purchaseDoc.save();
+
+    user.userCart = [];
+    await user.save();
+
+    return user;
+  } catch (error) {
+    throw new Error(`Error al confirmar el pedido: ${error.message}`);
+  }
+}
+
+// Función para obtener el historial de compras de un usuario
+export async function getOrders(userId) {
+  try {
+    const purchases = await Order.find({ userId }).select('-__v -updatedAt');
+    if (!purchases) {
+      throw new Error('No se encontraron compras');
+    }
+    return purchases;
+  } catch (error) {
+    throw new Error(`Error al obtener el historial de compras: ${error.message}`);
   }
 }
