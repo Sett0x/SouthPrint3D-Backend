@@ -106,11 +106,12 @@ export async function deleteUser(req, res) {
 
 export async function addItemToCart(req, res) {
   const userId = req.user.id;
-  const { productId } = req.params; // Cambié para obtener el ID del producto desde los parámetros de la URL
+  const { productId } = req.params;
 
   try {
     const user = await UserService.addItemToCart(userId, productId);
-    res.json(user.userCart);
+    const populatedUser = await UserService.getCart(userId); // Usar la función getCart para obtener el carrito completo
+    res.json(populatedUser.userCart);
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
@@ -118,23 +119,24 @@ export async function addItemToCart(req, res) {
 
 export async function removeItemFromCart(req, res) {
   const userId = req.user.id;
-  const { productId } = req.params; // Mantuve el uso de los parámetros de la URL para obtener el ID del producto
+  const { productId } = req.params;
 
   try {
-    const user = await UserService.removeItemFromCart(userId, productId);
-    res.json(user.userCart);
+    await UserService.removeItemFromCart(userId, productId);
+    const populatedUser = await UserService.getCart(userId); // Usar la función getCart para obtener el carrito completo
+    res.json(populatedUser.userCart);
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
 }
 
-
 export async function clearCart(req, res) {
   const userId = req.user.id;
 
   try {
-    const user = await UserService.clearCart(userId);
-    res.json(user);
+    await UserService.clearCart(userId);
+    const populatedUser = await UserService.getCart(userId); // Usar la función getCart para obtener el carrito completo
+    res.json(populatedUser.userCart);
   } catch (error) {
     res.status(400).json({ message: error.message });
   }

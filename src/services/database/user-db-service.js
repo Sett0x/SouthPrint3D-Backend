@@ -197,15 +197,12 @@ export async function addItemToCart(userId, productId) {
       throw new Error('Producto no encontrado');
     }
 
-    // Verificar si el producto ya está en el carrito del usuario
     const productIndex = user.userCart.findIndex(cartItem => cartItem.toString() === productId);
     if (productIndex === -1) {
-      // Si el producto no está en el carrito, agregarlo
       user.userCart.push(productId);
       await user.save();
       return user;
     } else {
-      // Si el producto ya está en el carrito, podrías manejarlo según tus requisitos, como lanzar un error o simplemente devolver el usuario
       throw new Error('El producto ya está en el carrito del usuario');
     }
   } catch (error) {
@@ -220,10 +217,8 @@ export async function removeItemFromCart(userId, productId) {
       throw new Error('Usuario no encontrado');
     }
 
-    // Modificado para usar el método indexOf para encontrar la posición del producto en el carrito
     const productIndex = user.userCart.indexOf(productId);
     if (productIndex !== -1) {
-      // Si el producto está en el carrito, quitarlo
       user.userCart.splice(productIndex, 1);
       await user.save();
       return user;
@@ -235,7 +230,6 @@ export async function removeItemFromCart(userId, productId) {
   }
 }
 
-
 export async function clearCart(userId) {
   try {
     const user = await User.findById(userId);
@@ -245,7 +239,6 @@ export async function clearCart(userId) {
 
     user.userCart = [];
     await user.save();
-
     return user;
   } catch (error) {
     throw new Error(`Error al vaciar el carrito: ${error.message}`);
