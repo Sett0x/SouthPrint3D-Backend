@@ -1,0 +1,33 @@
+NotFound:
+  description: Resource not found
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          message:
+            type: string
+
+Unauthorized:
+  description: Unauthorized
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          message:
+            type: string
+
+ValidationError:
+  description: Validation error
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          message:
+            type: string
+          details:
+            type: array
+            items:
+              type: string

@@ -1,6 +1,331 @@
 /ping:
   get:
-    summary: pong
+    summary: Pong
     responses:
       '200':
-        description: ping/pong
+        description: Ping/Pong
+
+/login:
+  post:
+    summary: User login
+    requestBody:
+      description: Login credentials
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              username:
+                type: string
+              password:
+                type: string
+    responses:
+      '200':
+        description: Successful login
+      '401':
+        description: Unauthorized
+
+/logout:
+  post:
+    summary: User logout
+    responses:
+      '200':
+        description: Successful logout
+
+/products:
+  get:
+    summary: Retrieve a list of products
+    responses:
+      '200':
+        description: A list of products
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/Product'
+  post:
+    summary: Create a new product
+    security:
+      - apiKey: []
+    requestBody:
+      description: Product to create
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Product'
+    responses:
+      '201':
+        description: The created product
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Product'
+
+/products/hidden:
+  get:
+    summary: Retrieve hidden products (Admin only)
+    security:
+      - apiKey: []
+    responses:
+      '200':
+        description: A list of hidden products
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/Product'
+
+/products/category/{category}:
+  get:
+    summary: Retrieve products by category
+    parameters:
+      - name: category
+        in: path
+        required: true
+        schema:
+          type: string
+    responses:
+      '200':
+        description: A list of products in the category
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/Product'
+
+/products/{id}:
+  get:
+    summary: Retrieve a product by ID
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    responses:
+      '200':
+        description: A single product
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Product'
+  patch:
+    summary: Update a product by ID (Admin only)
+    security:
+      - apiKey: []
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    requestBody:
+      description: Updated product information
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Product'
+    responses:
+      '200':
+        description: The updated product
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Product'
+  delete:
+    summary: Delete a product by ID (Admin only)
+    security:
+      - apiKey: []
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    responses:
+      '204':
+        description: No content
+
+/users/me:
+  get:
+    summary: Get current user's profile
+    security:
+      - apiKey: []
+    responses:
+      '200':
+        description: User's profile
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+
+/users/cart/add/{productId}:
+  post:
+    summary: Add an item to the cart
+    security:
+      - apiKey: []
+    parameters:
+      - name: productId
+        in: path
+        required: true
+        schema:
+          type: string
+    responses:
+      '200':
+        description: Item added to the cart
+
+/users/cart/remove/{productId}:
+  delete:
+    summary: Remove an item from the cart
+    security:
+      - apiKey: []
+    parameters:
+      - name: productId
+        in: path
+        required: true
+        schema:
+          type: string
+    responses:
+      '200':
+        description: Item removed from the cart
+
+/users/cart/clear:
+  delete:
+    summary: Clear the cart
+    security:
+      - apiKey: []
+    responses:
+      '200':
+        description: Cart cleared
+
+/users/cart:
+  get:
+    summary: Get the current user's cart
+    security:
+      - apiKey: []
+    responses:
+      '200':
+        description: User's cart
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/Product'
+
+/users/cart/confirm:
+  post:
+    summary: Confirm the order
+    security:
+      - apiKey: []
+    responses:
+      '200':
+        description: Order confirmed
+
+/users/getOrders:
+  get:
+    summary: Get user's order history
+    security:
+      - apiKey: []
+    responses:
+      '200':
+        description: User's order history
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/Order'
+
+/users:
+  get:
+    summary: Retrieve a list of users (Admin only)
+    security:
+      - apiKey: []
+    responses:
+      '200':
+        description: A list of users
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/User'
+  post:
+    summary: Register a new user
+    requestBody:
+      description: User to register
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/User'
+    responses:
+      '201':
+        description: The created user
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+
+/users/{id}:
+  get:
+    summary: Retrieve a user by ID
+    security:
+      - apiKey: []
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    responses:
+      '200':
+        description: A single user
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+  patch:
+    summary: Update a user by ID
+    security:
+      - apiKey: []
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    requestBody:
+      description: Updated user information
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/User'
+    responses:
+      '200':
+        description: The updated user
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+  delete:
+    summary: Delete a user by ID
+    security:
+      - apiKey: []
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    responses:
+      '204':
+        description: No content
