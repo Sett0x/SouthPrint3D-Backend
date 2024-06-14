@@ -16,7 +16,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"username\": \"xd\",\r\n    \"password\": \"asdf1234\",\r\n    \"email\": \"xd@gmail.com\",\r\n    \"nombre\": {\r\n        \"name\": \"José Augusto\",\r\n        \"lastname\": \"Sobrino Morillo\"\r\n    },\r\n    \"phone\": \"844463114\",\r\n    \"address\": {\r\n        \"state\": \"Estado\",\r\n        \"province\": \"Provincia\",\r\n        \"city\": \"Ciudad\",\r\n        \"zipcode\": \"12345\",\r\n        \"street\": \"Calle Ejemplo\",\r\n        \"number\": 123\r\n    },\r\n    \"role\": \"admin\"\r\n}\r\n",
+							"raw": "{\r\n  \"username\": \"Setto\",\r\n  \"password\": \"asdf1234\",\r\n  \"nombre\": {\r\n    \"name\": \"jose A\",\r\n    \"lastname\": \"Sobllo\"\r\n  },\r\n  \"email\": \"eltitosetto@gmail.com\",\r\n  \"phone\": \"744463114\",\r\n  \"address\": {\r\n    \"state\": \"Andalucia\",\r\n    \"province\": \"Sevilla\",\r\n    \"city\": \"Sevilla\",\r\n    \"zipcode\": \"41006\",\r\n    \"street\": \"Estoril\",\r\n    \"number\": 40\r\n  },\r\n  \"role\": \"admin\"\r\n}\r\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -40,12 +40,43 @@
 				},
 				{
 					"name": "login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const body = pm.response.json();\r",
+									"\r",
+									"pm.collectionVariables.set('token', body.token)"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Token}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "POST",
-						"header": [],
+						"header": [
+							{
+								"key": "Token",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							}
+						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"username\": \"Setto\",\r\n    \"password\": \"asdf1234\"\r\n}",
+							"raw": "{\r\n    \"usernameOrEmail\": \"Setto\",\r\n    \"password\": \"asdf1234\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -61,6 +92,55 @@
 							"port": "8080",
 							"path": [
 								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "logout",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Capture and delete token', function () {\r",
+									"    postman.setEnvironmentVariable('token', '');\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{Token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/logout",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"logout"
 							]
 						}
 					},
@@ -212,6 +292,177 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "userMe",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "getUserCart",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Token",
+								"value": "{{Token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/users/cart",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"users",
+								"cart"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "addToUserCart",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Token",
+								"value": "{{Token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/users/cart/add/6668c11cf6c84dd7dc976bcd",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"users",
+								"cart",
+								"add",
+								"6668c11cf6c84dd7dc976bcd"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DelFromUserCart",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/users/666881d76e5d00976886b934/cart/6655def5c9d334718d818fcd",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"users",
+								"666881d76e5d00976886b934",
+								"cart",
+								"6655def5c9d334718d818fcd"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "clearUserCart",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/users/cart",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"users",
+								"cart"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ConfirmOrder",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "getOrders",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
 				}
 			]
 		},
@@ -235,7 +486,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"Spartan Helmet\",\r\n    \"description\": \"Está chulo, tremendo casco.\",\r\n    \"price\": 50,\r\n    \"discount\": 0,\r\n    \"stock\": 100,\r\n    \"category\": \"Casco\",\r\n    \"dimensions\": {\r\n        \"width\": 60,\r\n        \"height\": 60,\r\n        \"depth\": 60\r\n    },\r\n    \"averageRating\": 0,\r\n    \"images\": [\r\n    \"Spartan_Helmet_1.webp\",\r\n    \"Spartan_Helmet_2.webp\",\r\n    \"Spartan_Helmet_3.webp\"\r\n  ]\r\n}",
+							"raw": "{\r\n    \"show\": true,\r\n    \"name\": \"Spartan Helmet\",\r\n    \"description\": \"Está chulo, tremendo casco.\",\r\n    \"price\": 50,\r\n    \"discount\": 0,\r\n    \"stock\": 100,\r\n    \"categories\": [\"Casco\", \"spartan\", \"history\"],\r\n    \"dimensions\": {\r\n        \"width\": 60,\r\n        \"height\": 60,\r\n        \"depth\": 60\r\n    },\r\n    \"averageRating\": 0,\r\n    \"images\": [\r\n        \"Spartan_Helmet_1.webp\",\r\n        \"Spartan_Helmet_2.webp\",\r\n        \"Spartan_Helmet_3.webp\"\r\n    ]\r\n}\r\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -286,6 +537,14 @@
 					"response": []
 				},
 				{
+					"name": "PaginationTest",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
 					"name": "DelProductByID",
 					"request": {
 						"auth": {
@@ -301,7 +560,7 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/products/65ecac5d90c6eabac0f1b344",
+							"raw": "http://localhost:8080/products/66058e35e1c8903b65d42987",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -309,7 +568,7 @@
 							"port": "8080",
 							"path": [
 								"products",
-								"65ecac5d90c6eabac0f1b344"
+								"66058e35e1c8903b65d42987"
 							]
 						}
 					},
@@ -363,7 +622,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"category\": \"Casco\"\r\n}",
+							"raw": "{\r\n  \"averageRating\": 4\r\n}\r\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -371,7 +630,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/products/65ecac8190c6eabac0f1b34b",
+							"raw": "http://localhost:8080/products/6655def5c9d334718d818fcd",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -379,7 +638,7 @@
 							"port": "8080",
 							"path": [
 								"products",
-								"65ecac8190c6eabac0f1b34b"
+								"6655def5c9d334718d818fcd"
 							]
 						}
 					},
@@ -410,6 +669,36 @@
 							"path": [
 								"products",
 								"65ecac8190c6eabac0f1b34b"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getHiddenProduct",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/products/hidden",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"products",
+								"hidden"
 							]
 						}
 					},
@@ -564,281 +853,6 @@
 							"path": [
 								"reviews",
 								"xxxxxx"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "order",
-			"item": [
-				{
-					"name": "AllOrders",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{Token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:8080/orders",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"orders"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "PostOrder",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{Token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n  \"products\": [\"ID_DEL_PRODUCTO_1\", \"ID_DEL_PRODUCTO_2\"],\r\n  \"shippingAddress\": \"DIRECCION_DE_ENVIO\"\r\n}\r\n",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:8080/orders",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"orders"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "GetOrderByID",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{Token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:8080/orders/xxx",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"orders",
-								"xxx"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "UpdateStatusByID",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{Token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "PATCH",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n  \"status\": \"NUEVO_ESTADO_DEL_PEDIDO\"\r\n}\r\n",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:8080/orders/:id/status",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"orders",
-								":id",
-								"status"
-							],
-							"variable": [
-								{
-									"key": "id",
-									"value": ""
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "DelOrderByID",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{Token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "DELETE",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:8080/orders/xxx",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"orders",
-								"xxx"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "GetHistory",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{Token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n  \"startDate\": \"YYYY-MM-DD\",\r\n  \"endDate\": \"YYYY-MM-DD\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:8080/orders/history",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"orders",
-								"history"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Search",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{Token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n  \"productName\": \"Spartan Helmet\"\r\n}\r\n",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:8080/orders/history/search",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"orders",
-								"history",
-								"search"
 							]
 						}
 					},
