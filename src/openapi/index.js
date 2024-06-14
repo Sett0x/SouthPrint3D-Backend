@@ -14,8 +14,8 @@ function parseYaml(file) {
 export const swaggerDoc = {
     openapi: "3.0.0",
     info: {
-        title: "My simple API",
-        description: "A simple API to learn how to write OpenAPI Specification",
+        title: "SouthPrint3D",
+        description: "Endpoints of SouthPrint3D backend.",
     },
     paths: parseYaml('paths'),
     components: {
