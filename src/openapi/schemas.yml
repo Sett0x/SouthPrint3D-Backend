@@ -1,0 +1,167 @@
+User:
+  type: object
+  properties:
+    _id:
+      type: string
+      description: User ID
+    username:
+      type: string
+      description: User's username
+    password:
+      type: string
+      description: User's password (hashed)
+    nombre:
+      type: object
+      properties:
+        name:
+          type: string
+          description: User's first name
+        lastname:
+          type: string
+          description: User's last name
+    email:
+      type: string
+      description: User's email address
+    phone:
+      type: string
+      description: User's phone number
+    address:
+      type: object
+      properties:
+        state:
+          type: string
+        province:
+          type: string
+        city:
+          type: string
+        zipcode:
+          type: string
+        street:
+          type: string
+        number:
+          type: integer
+        floor:
+          type: string
+        apartment:
+          type: string
+    userCart:
+      type: array
+      items:
+        type: string
+        description: Product ID referenced in the cart
+    role:
+      type: string
+      enum:
+        - admin
+        - user
+      description: User's role in the system
+    createdAt:
+      type: string
+      format: date-time
+      description: Date and time when the user was created
+    updatedAt:
+      type: string
+      format: date-time
+      description: Date and time when the user was last updated
+
+Product:
+  type: object
+  properties:
+    _id:
+      type: string
+      description: Product ID
+    show:
+      type: boolean
+      description: Whether the product is currently displayed
+    name:
+      type: string
+      description: Product name
+    description:
+      type: string
+      description: Product description
+    price:
+      type: number
+      description: Product price
+    iva:
+      type: number
+      description: IVA (Value Added Tax) rate for the product
+    totalPrice:
+      type: number
+      description: Total price of the product including IVA
+    ivaPrice:
+      type: number
+      description: IVA amount for the product
+    discount:
+      type: number
+      description: Discount percentage for the product
+    stock:
+      type: integer
+      description: Available stock of the product
+    categories:
+      type: array
+      items:
+        type: string
+        description: Product categories
+    dimensions:
+      type: object
+      properties:
+        width:
+          type: number
+        height:
+          type: number
+        depth:
+          type: number
+    averageRating:
+      type: number
+      description: Average rating of the product
+    images:
+      type: array
+      items:
+        type: string
+        description: URL(s) of product images
+    createdAt:
+      type: string
+      format: date-time
+      description: Date and time when the product was created
+    updatedAt:
+      type: string
+      format: date-time
+      description: Date and time when the product was last updated
+
+Order:
+  type: object
+  properties:
+    _id:
+      type: string
+      description: Order ID
+    userId:
+      type: string
+      description: User ID who placed the order
+    shippingAddress:
+      type: string
+      description: Shipping address ID associated with the order
+    products:
+      type: array
+      items:
+        type: object
+        properties:
+          productId:
+            type: string
+            description: ID of the product in the order
+          productName:
+            type: string
+            description: Name of the product in the order
+          price:
+            type: number
+            description: Price of the product in the order
+    totalPrice:
+      type: number
+      description: Total price of the order
+    createdAt:
+      type: string
+      format: date-time
+      description: Date and time when the order was created
+    updatedAt:
+      type: string
+      format: date-time
+      description: Date and time when the order was last updated
